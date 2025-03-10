@@ -15,4 +15,5 @@ export interface UserModel {
   status?: "ACTIVE" | "BLOCKED";
   createdAt?: string;
   updatedAt?: string;
+  password: string;  //  Ensure this exists
 }

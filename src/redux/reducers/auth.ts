@@ -9,6 +9,8 @@ interface IinitialState {
   isAuthenticated: boolean;
   isWhatsappCodeSend: boolean;
   rediectToLogin: boolean | null;
+  isOtpVerified: boolean|null, // New state for OTP verification
+
 }
 
 const userInitState: UserModel = {
@@ -20,6 +22,7 @@ const userInitState: UserModel = {
   country: "",
   role: "SELLER",
   isSeller: false,
+  password: "",
   isEmailConfirmed: false,
   emailVerifyToken: "",
   passwordResetToken: "",
@@ -37,6 +40,8 @@ const initialState: IinitialState = {
   user: userInitState,
   isWhatsappCodeSend: false,
   rediectToLogin: false,
+  isOtpVerified: false, // New state for OTP verification
+
 };
 
 const AuthSlice = createSlice({
@@ -50,6 +55,9 @@ const AuthSlice = createSlice({
         isAuthenticated: true,
         loading: false,
       };
+    },
+    otpVerified: (state) => {
+      state.isOtpVerified = true;
     },
     setUser: (state, { payload }) => {
       return {
@@ -65,7 +73,7 @@ const AuthSlice = createSlice({
       return {
         ...state,
         ...payload,
-        isAuthenticated: true,
+        isAuthenticated: payload.isAuthenticated ?? state.isAuthenticated, // Keep it false until OTP is verified
         loading: false,
       };
     },
@@ -87,6 +95,7 @@ export const {
   setUser,
   userLoaded,
   toggleWhatsappCode,
+  otpVerified,
 } = AuthSlice.actions;
 
 export default AuthSlice.reducer;
