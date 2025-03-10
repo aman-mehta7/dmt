@@ -12,7 +12,7 @@ import { switchLoading } from "../reducers/ui";
 // import { getAllTransactions } from "./transactions";
 // import { resetTransactoins } from "../reducers/transactions";
 // import { showAllConversations, showConversations } from "./message";
-import { loginSuccess, signOut } from "../reducers/auth";
+import { loginSuccess, signOut,otpVerified} from "../reducers/auth";
 import { getUser } from "./user";
 import { message } from "antd";
 import api from "../../api";
@@ -107,6 +107,63 @@ export const login =
 //     );
 //   }
 // };
+// export const verifyOtp =
+//   (email: string, otp: string,navigate: any,password: string) =>
+//   async (dispatch: AppDispatch) => {
+//     try {
+//       dispatch(switchLoading());
+
+//       await api.post("/auth/verify-otp", { email, otp, password });
+
+//       dispatch(otpVerified()); // Update state to mark OTP as verified
+//       navigate("/app/dashboard"); //  Redirect to home page after successful OTP verification
+
+//       message.success("OTP Verified! Redirecting...");
+//       dispatch(switchLoading());
+//     } catch (err: any) {
+//       dispatch(switchLoading());
+//       message.error(err.response?.data?.error || "Invalid OTP, try again.");
+//     }
+//   };
+export const verifyOtp =
+  (email: string, otp: string, navigate: any, password: string) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      dispatch(switchLoading());
+
+      // Send OTP verification request
+      const res = await api.post("/auth/verify-otp", { email, otp, password });
+
+      // Extract user data and token from response
+      const { token, user } = res.data;
+
+      // Store authentication token
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_id", user.id);
+
+      // Dispatch OTP verified action
+      dispatch(otpVerified());
+
+      // Dispatch login success and update user state
+      dispatch(
+        loginSuccess({
+          user,
+          isAuthenticated: true, // Now user is authenticated
+          token,
+        })
+      );
+
+      message.success("OTP Verified! Redirecting...");
+      
+      // Redirect to dashboard
+      navigate("/app/dashboard");
+
+      dispatch(switchLoading());
+    } catch (err: any) {
+      dispatch(switchLoading());
+      message.error(err.response?.data?.error || "Invalid OTP, try again.");
+    }
+  };
 
 export const getAllUser = () => async () => {
   try {
@@ -124,22 +181,52 @@ export const getAllUser = () => async () => {
     );
   }
 };
-
-export const signup = (body: any) => async (dispatch: AppDispatch) => {
+export const signup = (body: any, navigate: any) => async (dispatch: AppDispatch) => {
   try {
     dispatch(switchLoading());
+
     await api.post("/auth/sign-up-email", body);
 
-    message.success(
-      "Registration successfull! Please check your email for confirmation."
+    message.success("OTP sent! Please check your email.");
+    dispatch(switchLoading());
+
+    // Store email in Redux state
+    dispatch(
+      loginSuccess({
+        user: { ...body }, // Store user data
+        isAuthenticated: false,
+        token: null,
+      })
     );
 
-    dispatch(switchLoading());
+    //Store email in LocalStorage
+    localStorage.setItem("user_email", body.email);
+
+    // Ensure Redux updates before navigating
+    setTimeout(() => {
+      navigate("/auth/verify-otp");
+    }, 500);
   } catch (err: any) {
     dispatch(switchLoading());
-    message.error(err.response.data.error);
+    message.error(err.response?.data?.error || "Signup failed.");
   }
 };
+
+// export const signup = (body: any) => async (dispatch: AppDispatch) => {
+//   try {
+//     dispatch(switchLoading());
+//     await api.post("/auth/sign-up-email", body);
+
+//     message.success(
+//       "Registration successfull! Please check your email for confirmation."
+//     );
+
+//     dispatch(switchLoading());
+//   } catch (err: any) {
+//     dispatch(switchLoading());
+//     message.error(err.response.data.error);
+//   }
+// };
 
 export const signinwithGoogle =
   (body: any) => async (dispatch: AppDispatch) => {

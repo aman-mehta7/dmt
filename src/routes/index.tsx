@@ -42,6 +42,7 @@ const TripBoardPage = Loadable(TripBoard);
 const ConfirmEmailPage = Loadable(ConfirmEmail);
 const LoginPage = Loadable(lazy(() => import("../pages/auth/Loginpage")));
 const RegisterPage = Loadable(lazy(() => import("../pages/auth/RegisterPage")));
+const OtpVerify = Loadable(lazy(()=> import("../pages/auth/OtpVerify") ));
 
 // Dashboard pages
 const DashboardPage = Loadable(Dashboard);
@@ -85,6 +86,14 @@ export default function Router() {
             <GuestGuard>
               <ForgotPass />
             </GuestGuard>
+          ),
+        },
+        {
+          path: "verify-otp", // Ensure it matches what you navigate to
+          element: (
+            <GuestGuard>
+              <OtpVerify />
+             </GuestGuard>
           ),
         },
         {

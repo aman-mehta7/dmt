@@ -5,10 +5,16 @@ import "./styles/swiper.css";
 import { RootAppState } from "./redux/store";
 import { useSelector } from "react-redux";
 import { Loader } from "./components";
+// import { persistor } from "../src/redux/store"
+// import { useEffect } from "react";
 
 function App() {
   const loading = useSelector((state: RootAppState) => state.ui.loading);
+    // useEffect(() => {
+    //   persistor.purge(); // Clears persisted state
+    //   localStorage.removeItem("persist:root");
 
+    // },);
   return (
     <>
       <Toaster
