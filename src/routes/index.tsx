@@ -23,6 +23,8 @@ import {
   ReservationPage as Reservation,
   ReservationDetailsPage as ReservationDetails,
 } from "../pages";
+import PropertyPage from "../pages/dashboard/Properties/PropertyPage";
+import AddPropertyForm from "../pages/dashboard/Properties/Create/AddProperties";
 
 const Loadable = (Component: any) => (props: any) => {
   return (
@@ -118,6 +120,8 @@ export default function Router() {
       children: [
         { path: "dashboard", element: <DashboardPage /> },
         { path: "profile", element: <ProfilePage /> },
+        { path: "properties", element: <PropertyPage /> },
+        { path: "properties/new", element: <AddPropertyForm /> },
         { path: "events", element: <EventsPage /> },
         { path: "stays", element: <StaysPage /> },
         { path: "events/:id/details", element: <EventsDetailsPage /> },

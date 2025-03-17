@@ -24,8 +24,8 @@ const navss = {
   BUYER: [
     { name: "Dashboard", href: "dashboard", icon: <GiSpeedometer /> },
     { name: "Inbox", href: "inbox", icon: <CiMail /> },
-    { name: "Properties", href: "inbox", icon: <LuTableProperties /> },
-    { name: "Events", href: "inbox", icon: <MdOutlineEventAvailable />},
+    { name: "Properties", href: "properties", icon: <LuTableProperties /> },
+    { name: "Events", href: "events", icon: <MdOutlineEventAvailable />},
     { name: "Rooms", href: "inbox", icon: <MdMeetingRoom /> },
     { name: "Reservations", href: "reservation", icon: <PiBookBookmark /> },
     { name: "Payouts", href: "inbox", icon: <CiWallet />},
@@ -91,8 +91,9 @@ const navss = {
 
 const DashboardNav = () => {
   const role = (useSelector((state: RootAppState) => state.auth.user.role) || "BUYER") as keyof typeof navss;
-  const navs = navss[role] || navss.BUYER;
-  // const navs =  navss.BUYER;
+  console.log(role);
+  // const navs = navss[role] || navss.BUYER;
+  const navs =  navss.BUYER;
   return (
     <ul className="flex flex-col flex-1 border-r-2 border-[#E2E2E2] max-w-[80px] lg:max-w-[300px]">
       {navs.map((nav, i) => (
