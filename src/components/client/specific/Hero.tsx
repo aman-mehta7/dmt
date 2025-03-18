@@ -1,24 +1,32 @@
 import { ClientContainer } from "../..";
 import Filter from "./Filter";
+import banner from "../../../../public/banner.jpg";
 
 const Hero = () => {
   return (
     <div
-      className={`relative w-full py-20 md:py:0 md:h-[652px] flex justify-center`}
+      className="relative w-full py-20 md:py-0 md:h-[652px] flex justify-center"
+      style={{
+        backgroundImage: `url(${banner})`,
+        backgroundPosition: "33% 22%",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        width: "100%",
+        height: "86vh",
+        minHeight: "65vh",
+        maxHeight: "480px",
+      }}
     >
       <ClientContainer>
         <div
-          className={`h-full w-full md:max-w-7xl flex flex-col justify-center md:px-7`}
+          className="absolute  left-[50%] translate-x-[-50%] h-full w-full  max-w-[1100px]"
         >
-          <div className={`max-w-[32ch] sm:max-w-[40ch] md:max-w-full`}>
-            <h2
-              className={`text-dark-blue font-bold md:font-semibold text-3xl sm:text-4xl md:text-5xl mb-4 md:mb-3`}
-            >
-              Explore the best Nepal has to offer.
+          <div className="absolute top-[50%] translate-y-[-50%] text-white md:max-w-full">
+            <h2 className="font-normal md:font-normal text-3xl sm:text-4xl md:text-6xl mb-4 md:mb-3">
+              Explore your <p className="font-extrabold mt-2">Dreamtime</p>
             </h2>
-            <span className={`text-dark-blue text-md font-semibold`}>
-              Enjoy discounts and travel rewards at hundreds of hotels, and
-              excersions worldwide
+            <span className="text-md font-semibold">
+              Tourism Marketplace for Events and Stays
             </span>
           </div>
           <Filter />

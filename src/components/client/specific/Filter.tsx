@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Svg } from "../../../assets";
+import { FaList } from "react-icons/fa";
 import { AutoComplete, DatePicker, Select, message } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -9,8 +10,10 @@ import { RootAppState } from "../../../redux/store";
 const { RangePicker } = DatePicker;
 
 const items = [
-  { label: "Places", value: "places" },
-  { label: "Events", value: "events" },
+  { label: "Select Service", value: "" },
+  { label: "Stays", value: "stays" },
+  { label: "Online", value: "online" },
+  { label: "Onsite", value: "onsite" },
 ];
 
 const Filter = () => {
@@ -60,10 +63,10 @@ const Filter = () => {
 
   return (
     <div
-      className={`grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 mt-8 border border-primary bg-white rounded-lg w-full overflow-hidden`}
+      className={`absolute bottom-0 left-[50%] translate-x-[-50%] translate-y-[50%] w-full max-w-[1100px] grid grid-cols-4  mt-8 bg-[#f4f4f4] rounded-sm overflow-hidden p-10 shadow-[0px_4px_12px_rgba(0,0,0,0.08)]`}
     >
       <div
-        className={`flex gap-2 justify-start items-center cursor-pointer py-5 px-4 md:p-4 border border-primary`}
+        className={`flex gap-1 justify-start items-center cursor-pointer p-2 px-3 border border-primary rounded-tl-md rounded-bl-md bg-white`}
       >
         <img src={Svg.calender} alt="calender icon" />
         <RangePicker
@@ -82,9 +85,9 @@ const Filter = () => {
         />
       </div>
       <div
-        className={`flex gap-2 justify-start items-center border border-primary cursor-pointer py-5 px-4 md:p-4`}
+        className={`flex gap-1 justify-start items-center border border-primary cursor-pointer px-4 bg-white`}
       >
-        <img src={Svg.clock} alt="clock icon" />
+        <FaList className="text-primary"/>
         <Select
           variant="borderless"
           defaultValue={selectCategory}
@@ -93,8 +96,9 @@ const Filter = () => {
           options={items}
         />
       </div>
+      
       <div
-        className={`flex gap-2 justify-start items-center cursor-pointer py-5 px-4 md:p-4 border border-primary`}
+        className={`flex gap-1 justify-start items-center cursor-pointer border border-primary px-4 bg-white`}
       >
         <img src={Svg.marker} alt="marker icon" />
         <AutoComplete
@@ -111,9 +115,9 @@ const Filter = () => {
       <button
         type="button"
         onClick={onExplore}
-        className={`bg-primary py-4 xl:rounded-tr-md lg:rounded-l-none rounded-t-none rounded-b-md sm:rounded-bl-none`}
+        className={`bg-primary xl:rounded-tr-md lg:rounded-l-none rounded-t-none rounded-b-md sm:rounded-bl-none w-[200px] `}
       >
-        <span className={`text-xl text-white font-bold`}>Explore</span>
+        <span className={`text-base text-white `}>Explore</span>
       </button>
     </div>
   );
