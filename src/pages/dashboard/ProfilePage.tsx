@@ -252,7 +252,8 @@ import { GoVerified, GoUnverified } from "react-icons/go";
 import { Svg } from "../../assets";
 import { Divider, Modal, Spin, Tooltip, message } from "antd";
 import { UserModel } from "../../types/user";
-import { updateUser, sendWhatsAppCode } from "../../redux/actions/user"; // New action to send code
+// import { updateUser, sendWhatsAppCode } from "../../redux/actions/user"; // New action to send code
+import { updateUser } from "../../redux/actions/user"; // New action to send code
 import PhoneInput, { formatPhoneNumberIntl } from "react-phone-number-input";
 import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";  
@@ -306,7 +307,7 @@ const InputStatus = ({ status }: { status: "verified" | "not verified" }) => (
 
 const ProfilePage = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();  // For navigation to OTP page
+  // const navigate = useNavigate();  // For navigation to OTP page
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [formState, setFormState] = useState<UserModel>(initState);
   const { user } = useAppSelector((state: RootAppState) => state.auth);
@@ -378,15 +379,15 @@ const ProfilePage = () => {
       // Send the phone number and country to the backend
       console.log("Sending data:", { phoneNumber: PNumber, country: countryCode }); // Log data being sent
   
-      await dispatch(sendWhatsAppCode({ phoneNumber: PNumber, country: countryCode }));
+      // await dispatch(sendWhatsAppCode({ phoneNumber: PNumber, country: countryCode }));
   
       setIsUpdating(false);
-      message.success("Verification code sent successfully!");
+      // message.success("Verification code sent successfully!");
   
-      navigate("/confirm-code", { state: { phoneNumber: PNumber } });
+      // navigate("/confirm-code", { state: { phoneNumber: PNumber } });
     } catch (error: any) {
       setIsUpdating(false);
-      message.error(error.response?.data?.message || "Failed to send verification code.");
+      // message.error(error.response?.data?.message || "Failed to send verification code.");
     }
   };
   
