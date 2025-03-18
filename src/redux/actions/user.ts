@@ -48,11 +48,11 @@ export const updateUser = (body: any) => async (dispatch: AppDispatch) => {
     } = res;
 
     dispatch(setUser(user));
-    await dispatch(
-      sendWhatsAppCode({
-        country: selectedCountry,
-      })
-    );
+    // await dispatch(
+    //   sendWhatsAppCode({
+    //     country: selectedCountry,
+    //   })
+    // );
 
     message.success("Successfully updated profile!");
     return user;
