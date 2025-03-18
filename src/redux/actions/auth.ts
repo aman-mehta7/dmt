@@ -1,3 +1,4 @@
+import { message } from 'antd';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppDispatch } from "../store";
 // import {
@@ -14,7 +15,6 @@ import { switchLoading } from "../reducers/ui";
 // import { showAllConversations, showConversations } from "./message";
 import { loginSuccess, signOut,otpVerified} from "../reducers/auth";
 import { getUser } from "./user";
-import { message } from "antd";
 import api from "../../api";
 
 
@@ -153,18 +153,42 @@ export const verifyOtp =
         })
       );
 
-      message.success("OTP Verified! Redirecting...");
-      
+      message.success({
+        content: " OTP Verified! Redirecting...",
+        duration: 2,
+      });      
       // Redirect to dashboard
       navigate("/app/dashboard");
 
       dispatch(switchLoading());
     } catch (err: any) {
       dispatch(switchLoading());
-      message.error(err.response?.data?.error || "Invalid OTP, try again.");
+      message.error({
+        content: err.response?.data?.message || "Invalid OTP, try again.",
+        duration: 3,
+      });    }
+  };
+  export const resendOtp = (email: string) => async (dispatch: AppDispatch) => {
+    try {
+      dispatch(switchLoading());
+  
+      await api.post("/auth/resend-otp", { email });
+  
+      message.success({
+        content: "OTP resent successfully! Please check your email.",
+        duration: 2,
+      });
+  
+      dispatch(switchLoading());
+    } catch (err: any) {
+      dispatch(switchLoading());
+      message.error({
+        content: err.response?.data?.error || "❌ Failed to resend OTP.",
+        duration: 3,
+      });
     }
   };
-
+  
 export const getAllUser = () => async () => {
   try {
     await api.get("/user/get-all-users");

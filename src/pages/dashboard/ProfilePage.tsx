@@ -257,6 +257,24 @@ import PhoneInput, { formatPhoneNumberIntl } from "react-phone-number-input";
 import { MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";  
 
+// const initState: UserModel = {
+//   id: 0,
+//   firstName: "",
+//   lastName: "",
+//   email: "",
+//   phoneNumber: "",
+//   country: "",
+//   role: "SELLER",
+//   isSeller: false,
+//   isEmailConfirmed: false,
+//   emailVerifyToken: "",
+//   passwordResetToken: "",
+//   isPhoneNumberConfirmed: false,
+//   isCountryConfirmed: false,
+//   status: "ACTIVE",
+//   createdAt: "",
+//   updatedAt: "",
+// };
 const initState: UserModel = {
   id: 0,
   firstName: "",
@@ -272,10 +290,10 @@ const initState: UserModel = {
   isPhoneNumberConfirmed: false,
   isCountryConfirmed: false,
   status: "ACTIVE",
-  createdAt: "",
-  updatedAt: "",
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  password: "", // Ensure password is always present
 };
-
 const InputStatus = ({ status }: { status: "verified" | "not verified" }) => (
   <div
     className={`absolute top-1/2 -translate-y-1/2 right-2 ${status === "verified" ? "bg-success/20" : "bg-danger/20"} p-2 rounded cursor-pointer`}
