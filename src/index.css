@@ -31,7 +31,6 @@ body {
   width: 100vw;
   height: 100vh;
   position: relative;
-  color: var(--white);
   overflow-x: hidden !important;
   /* scroll-padding-top: 20rem !important; */
 }
