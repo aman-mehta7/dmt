@@ -115,7 +115,7 @@ const Filter = () => {
       <button
         type="button"
         onClick={onExplore}
-        className={`bg-primary xl:rounded-tr-md lg:rounded-l-none rounded-t-none rounded-b-md sm:rounded-bl-none w-[200px] `}
+        className={`bg-primary xl:rounded-tr-md lg:rounded-l-none rounded-t-none rounded-b-md sm:rounded-bl-none min-w-[150px] `}
       >
         <span className={`text-base text-white `}>Explore</span>
       </button>
