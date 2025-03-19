@@ -105,7 +105,7 @@ const Filter = () => {
           variant="borderless"
           style={{ width: `100%` }}
           options={locations}
-          placeholder="Enter your destination"
+          placeholder="Destination"
           onChange={(value: string) => setSelectDestination(value)}
           filterOption={(inputValue, option) =>
             option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
