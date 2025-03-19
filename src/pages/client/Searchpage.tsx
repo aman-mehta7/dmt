@@ -10,7 +10,6 @@ import dayjs from "dayjs";
 import { useAppSelector } from "../../hooks/useTypedSelectors";
 import { RootAppState } from "../../redux/store";
 import { roomTypes } from "../../lib/constants/dashboard";
-// import { MdOutlineBed } from "react-icons/md";
 import { BiSolidCategory } from "react-icons/bi";
 
 const { RangePicker } = DatePicker;
