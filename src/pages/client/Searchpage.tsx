@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AutoComplete, Divider, Flex, Input, Select } from "antd";
 import { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router";
-import { DatePicker } from "antd";
-import { Svg } from "../../assets";
-
-import { LocationCard, PositionViewMap } from "../../components";
+import { DatePicker, Divider } from "antd";
+import { CiStar } from "react-icons/ci";
 import dayjs from "dayjs";
 import { useAppSelector } from "../../hooks/useTypedSelectors";
 import { RootAppState } from "../../redux/store";
 import { roomTypes } from "../../lib/constants/dashboard";
-import { BiSolidCategory } from "react-icons/bi";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { CiSearch } from "react-icons/ci";
+import { Button, PositionViewMap } from "../../components";
+import { Modal } from "antd";
+import { Checkbox } from "antd";
+
 
 const { RangePicker } = DatePicker;
 
@@ -59,7 +61,6 @@ const filterInitState: FilterState = {
 const Searchpage = () => {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
-
   const start_date = searchParams.get("start");
   const end_date = searchParams.get("end");
   const type = searchParams.get("type");
@@ -67,13 +68,31 @@ const Searchpage = () => {
   const { places } = useAppSelector((state: RootAppState) => state.places);
   const { events } = useAppSelector((state: RootAppState) => state.events);
   const [filterState, setFilterState] = useState<FilterState>(filterInitState);
-  // const [searchLocation, setSearchLocation] = useState<{
-  //   lat: number;
-  //   lng: number;
-  // }>({
-  //   lat: 27.717245,
-  //   lng: 85.323959,
-  // });
+
+    //   Toggle Location Filter dropdown form
+    const [openFilter,setOpenFilter] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [checkboxOptions] = useState([
+        "Essentials",
+        "Cable",
+        "WiFi",
+        "Parking",
+        "Pool",
+        "Gym",
+        "TV",
+        "Air Conditioning",
+        "Heating",
+        "Kitchen",
+        "Washer",
+        "Dryer",
+        "Balcony",
+        "Elevator",
+        "Security",
+        "Garden",
+        "Fireplace",
+        "BBQ",
+    ]);
+
 
   useEffect(() => {
     if (start_date && end_date && type && destination) {
@@ -89,20 +108,6 @@ const Searchpage = () => {
   }, []);
 
   const isCategoryPlaces = filterState.type === "places" ? true : false;
-  const locations = useMemo(() => {
-    const items = isCategoryPlaces ? places : events;
-    const uniqueLocations = items
-      .map((item: any) => {
-        return {
-          value: isCategoryPlaces ? item.street : item.location,
-        };
-      })
-      .filter(
-        (item, index, self) =>
-          index === self.findIndex((t) => t.value === item.value)
-      );
-    return uniqueLocations;
-  }, [isCategoryPlaces, places, events]);
 
   const data = useMemo(() => {
     const { destination: userDestination, min_price, max_price } = filterState;
@@ -130,11 +135,7 @@ const Searchpage = () => {
     });
   }, [filterState, isCategoryPlaces, places, events]);
 
-  const onHandleChange = ({ target: { name, value } }: any) =>
-    setFilterState({
-      ...filterState,
-      [name]: value,
-    });
+
 
   const mapData = data.map((item: any) => {
     const {
@@ -171,168 +172,135 @@ const Searchpage = () => {
 
   return (
     <div className={`flex flex-1 flex-col w-full min-h-screen`}>
-      <div className={`p-4 md:py-6 md:px-8 border-b-2 border-fade-white`}>
-        <div className={`flex flex-col md:flex-row gap-4 md:gap-6`}>
-          <div
-            className={`flex gap-2 justify-start items-center cursor-pointer p-3 border-2 border-primary rounded-xl w-80`}
-          >
-            <img src={Svg.marker} className={`w-6`} alt="marker icon" />
-            <AutoComplete
-              size={`middle`}
-              variant="borderless"
-              filterOption={true}
-              value={filterState.destination}
-              options={locations}
-              placeholder="Search Destination..."
-              className={`border-outline-none w-full`}
-              style={{ width: "100%", textAlign: "start" }}
-              onChange={(value) =>
-                setFilterState({
-                  ...filterState,
-                  destination: value,
-                })
-              }
-              onSelect={(value: string) =>
-                setFilterState({
-                  ...filterState,
-                  destination: value,
-                })
-              }
-            />
-          </div>
-          <div
-            className={`flex gap-2 justify-start items-center border-2 border-primary rounded-xl cursor-pointer px-3 py-3 md:py-0 w-full md:w-80`}
-          >
-            <img src={Svg.calender} alt="calender icon" />
-            <RangePicker
-              suffixIcon={null}
-              bordered={false}
-              value={
-                !filterState.start_date.length
-                  ? null
-                  : [
-                      dayjs(filterState.start_date, "YYYY-MM-DD"),
-                      dayjs(filterState.end_date, "YYYY-MM-DD"),
-                    ]
-              }
-              onChange={(_: any, dateStrings: string[]) => {
-                const start_date = dateStrings[0];
-                const end_date = dateStrings[1];
+      
+      <div className="p-4 md:py-6 md:px-8 border-b-2 border-fade-white relative">
+        <h2 className="text-2xl font-medium mb-6">Results for <span className="font-bold">Event</span> Nepal</h2>
+        {/* Filter Button S */}
+        <div className="flex gap-3">
+            <div    >
+                <button onClick={()=> setOpenFilter(!openFilter)} className="border rounded-md py-3 px-4 text-white bg-primary flex gap-1 items-center">
+                    Location<IoMdArrowDropdown />
+                </button>
+                {/* Places filter dropdown s */}
+                {openFilter && 
+                <form className="absolute top-[139px] bg-white p-4 border border-primary w-full max-w-[400px] rounded-lg">
+                    <label className="font-bold ">Where are you going?</label>
+                    <input type="text" placeholder="Enter a Location" className="border border-primary rounded-sm p-3 mt-3"/>
+                    <div className="grid grid-cols-3 w-full gap-3 mt-3">
+                        <div className="col-span-2">
+                            <label className="font-bold">Check In and Checkout</label>
+                            <div className="border border-primary p-2">
+                                <RangePicker
+                                    suffixIcon={null}
+                                    bordered={false}
+                                    value={
+                                        !filterState.start_date.length
+                                        ? null
+                                        : [
+                                            dayjs(filterState.start_date, "YYYY-MM-DD"),
+                                            dayjs(filterState.end_date, "YYYY-MM-DD"),
+                                            ]
+                                    }
+                                    onChange={(_: any, dateStrings: string[]) => {
+                                        const start_date = dateStrings[0];
+                                        const end_date = dateStrings[1];
 
-                setFilterState({
-                  ...filterState,
-                  start_date,
-                  end_date,
-                });
-              }}
-              className={`w-full`}
-            />
-          </div>
-        </div>
-        <div className={`flex flex-wrap gap-4 md:gap-4 mt-4 md:mt-6`}>
-          <Flex
-            gap={10}
-            align="center"
-            className={`border-2 border-primary rounded-xl w-48 cursor-pointer py-2 px-4 md:p-3`}
-          >
-            <BiSolidCategory className={`text-primary text-3xl`} />
-            <Select
-              options={[
-                {
-                  value: "events",
-                },
-                {
-                  value: "places",
-                },
-              ]}
-              variant="borderless"
-              value={filterState.type}
-              style={{ height: "100%", width: "100%" }}
-              onChange={(value: string) =>
-                setFilterState({
-                  ...filterState,
-                  type: value as Category,
-                })
-              }
-            />
-          </Flex>
-
-          <Flex className={`border-2 border-primary px-3 rounded-xl`}>
-            <Input
-              name="min_price"
-              value={filterState.min_price}
-              placeholder="Price start range"
-              variant="borderless"
-              style={{
-                width: 140,
-                borderRadius: 0,
-                paddingBlock: 10,
-                borderRight: `1px solid #9d63df`,
-              }}
-              onChange={onHandleChange}
-            />
-            <Input
-              name="max_price"
-              value={filterState.max_price}
-              placeholder="Price end range"
-              variant="borderless"
-              style={{
-                width: 140,
-                borderRadius: 0,
-                paddingBlock: 10,
-                borderLeft: `1px solid #9d63df`,
-              }}
-              onChange={onHandleChange}
-            />
-          </Flex>
-
-          {/* {filterState.type === "places" && (
-            <Flex
-              gap={10}
-              align="center"
-              className={`border-2 border-primary rounded-xl w-60 cursor-pointer py-2 px-4 md:p-3`}
-            >
-              <MdOutlineBed className={`text-primary text-3xl`} />
-              <Select
-                options={rooms}
-                variant="borderless"
-                value={filterState.room}
-                style={{ height: "100%", width: "100%" }}
-                onChange={(value: string) =>
-                  setFilterState({
-                    ...filterState,
-                    room: value,
-                  })
+                                        setFilterState({
+                                        ...filterState,
+                                        start_date,
+                                        end_date,
+                                        });
+                                    }}
+                                    className={`w-full border`}
+                                />
+                            </div>
+                        </div>
+                        <div className="col-span-1">
+                            <label className="block font-bold">Guest</label>
+                            <input type="number" placeholder="1" className="min-w-[50px] w-full border border-primary p-3 rounded-md"/>
+                        </div>
+                    </div>
+                    <button className="flex items-center w-full justify-center gap-2 p-3 rounded-md bg-primary text-white mt-4">
+                        <CiSearch />
+                        Find a place
+                    </button>
+                </form>
                 }
-              />
-            </Flex>
-          )} */}
+                
+                {/* Places filter dropdown s */}
+            </div>
+
+            <button 
+            className="border rounded-md py-3 px-4 text-white bg-primary flex gap-1 items-center" 
+            onClick={() => setIsModalOpen(true)}>
+                Amenities
+            </button>
+                        {/* Modal Component */}
+            <Modal
+                open={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                footer={null} // Remove footer buttons (optional)
+                centered 
+                width="100%"
+                className="max-w-[700px]"
+                >
+                    <h2 className="text-center text-2xl">Amenities</h2>
+                    <Divider/>
+                    <div>
+                    <h2 className="font-bold text-2xl mb-6">Amenities</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {checkboxOptions.map((option, index) => (
+                            <Checkbox
+                                key={index}
+                                onChange={(e) => console.log(option, e.target.checked)}
+                                className="text-lg text-gray-700"
+                            >
+                                {option}
+                            </Checkbox>
+                        ))}
+                    </div>
+                    </div>
+                    <Divider/>
+                    <Button className="block ms-auto" title="submit"></Button>
+            </Modal>
+        </div>
+        {/* Filter Button E */}
+
+        <div className="grid grid-cols-2 gap-4">
+
+            {/* Location Card S */}
+            <div>
+            <div className="text-center p-2 rounded-sm bg-[#d1ecf1] mt-5">No hotels available at the moment</div>
+            <div className="flex flex-col gap-7 mt-7">
+                <div className="rounded-sm w-full max-w-[400px] shadow-lg">
+                    <figure className="h-[250px] object-cover overflow-hidden">
+                        <img src="https://dmttourism.com/storage/css/thumbnail_images/gqJMwNcvUqWEcD7B4Esj3vz3WpGy3bYUltFScc96.jpg" alt="" />
+                    </figure>
+                    <div className="mt-1 p-3">
+                        <span className="text-primary font-medium">Onsite Event</span>
+                        <p className="mt-1 mb-1">Event in Kathmandu 44600, Nepal</p>
+                        <p className="text-gray text-sm">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and de...</p>
+                        <div className="flex justify-between mt-4">
+                            <div className="flex items-center">
+                                <CiStar /> 0 (0)
+                            </div>
+                            <div><span className="font-semibold">NPR 3500</span> / per person</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            {/* Location Card E*/}
+            {/* Map S */}
+            <div className={` w-full md:block`}>
+                <PositionViewMap position={{ lat: 27.717245, lng: 85.323959 }} />
+            </div>
+            {/* Map E */}
+        
         </div>
       </div>
-      <section className={`flex flex-1 w-full h-full`}>
-        <div className={`w-full md:w-2/4`}>
-          <div className={`px-4 pt-4 md:px-8`}>
-            <h3
-              className={`text-sm text-gray font-medium mt-2 mb-4 capitalize`}
-            >{`${data.length}${data.length > 10 ? "+" : ""} ${
-              filterState.type
-            } ${filterState.destination && "in"} ${
-              filterState.destination
-            }`}</h3>
-            <Divider className={`h-0.5 w-full bg-fade-white mt-3 mb-4`} />
-          </div>
-          <div
-            className={`grid grid-flow-rows grid-cols-1 xl:grid-cols-2 mt-4 md:mt-10 px-0 md:px-4 overflow-auto`}
-          >
-            {data.map((item, i) => (
-              <LocationCard data={item} isPlace={isCategoryPlaces} key={i} />
-            ))}
-          </div>
-        </div>
-        <div className={`hidden w-full md:block md:w-2/4`}>
-          <PositionViewMap position={{ lat: 27.717245, lng: 85.323959 }} />
-        </div>
-      </section>
+
+
     </div>
   );
 };
