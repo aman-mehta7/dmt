@@ -16,24 +16,25 @@ import { switchLoading } from "../reducers/ui";
 import { loginSuccess, signOut,otpVerified} from "../reducers/auth";
 import { getUser } from "./user";
 import api from "../../api";
+import { NavigateFunction } from "react-router-dom"; // Import NavigateFunction type
 
 
-interface LoginResponse {
-  token: string;
-  user: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-}
+// interface LoginResponse {
+//   token: string;
+//   user: {
+//     id: number;
+//     firstName: string;
+//     lastName: string;
+//     email: string;
+//   };
+// }
 
 // Define the login success payload structure
-interface LoginSuccessPayload {
-  user: LoginResponse['user'];
-  isAuthenticated: boolean;
-  token: string;
-}
+// interface LoginSuccessPayload {
+//   user: LoginResponse['user'];
+//   isAuthenticated: boolean;
+//   token: string;
+// }
 
 export const login =
   (email: string, password: string) => async (dispatch: AppDispatch) => {
@@ -64,6 +65,95 @@ export const login =
     } catch (err: any) {
       dispatch(switchLoading());
       message.error(err.response.data.error);
+    }
+  };
+export const signup =
+  (body: any, navigate: any) => async (dispatch: AppDispatch) => {
+    try {
+      dispatch(switchLoading());
+
+      await api.post("/auth/sign-up-email", body);
+
+      message.success("✅ OTP sent! Please check your email.");
+      dispatch(
+        loginSuccess({
+          user: { ...body },
+          isAuthenticated: false,
+          token: null,
+        })
+      );
+
+      // localStorage.setItem("user_email", body.email);
+      setTimeout(() => {
+        navigate("/auth/verify-otp");
+      }, 500);
+    } catch (err: any) {
+      message.error(err.response?.data?.error || "Signup failed.");
+    } finally {
+      dispatch(switchLoading());
+    }
+  };
+
+// export const login =
+//   (email: string, password: string) => async (dispatch: AppDispatch) => {
+//     const body = { email, password };
+
+//     try {
+//       dispatch(switchLoading());
+
+//       const res = await api.post("/auth/sign-in", body);
+//       const { token, user } = res.data;
+
+//       //  Store token & user data in localStorage
+//       localStorage.setItem("token", token);
+//       localStorage.setItem("user_id", user.id);
+
+//       dispatch(
+//         loginSuccess({
+//           user,
+//           isAuthenticated: true,
+//           token,
+//         })
+//       );
+
+//       await dispatch(getUser(user.id));
+//       dispatch(switchLoading());
+
+//       message.success("Login successful!");
+//     } catch (err: any) {
+//       dispatch(switchLoading());
+//       message.error(err.response?.data?.error || "Login failed.");
+//     }
+//   };
+  export const verifyOtp =
+  (email: string, otp: string, navigate: any, password: string) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      dispatch(switchLoading());
+
+      const res = await api.post("/auth/verify-otp", { email, otp, password });
+      const { token, user } = res.data;
+
+      //  Store authentication token
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_id", user.id);
+
+      dispatch(otpVerified());
+
+      dispatch(
+        loginSuccess({
+          user,
+          isAuthenticated: true,
+          token,
+        })
+      );
+
+      message.success("OTP Verified! Redirecting...");
+      navigate("/app/dashboard");
+    } catch (err: any) {
+      message.error(err.response?.data?.error || "Invalid OTP, try again.");
+    } finally {
+      dispatch(switchLoading());
     }
   };
 
@@ -125,49 +215,49 @@ export const login =
 //       message.error(err.response?.data?.error || "Invalid OTP, try again.");
 //     }
 //   };
-export const verifyOtp =
-  (email: string, otp: string, navigate: any, password: string) =>
-  async (dispatch: AppDispatch) => {
-    try {
-      dispatch(switchLoading());
+// export const verifyOtp =
+//   (email: string, otp: string, navigate: any, password: string) =>
+//   async (dispatch: AppDispatch) => {
+//     try {
+//       dispatch(switchLoading());
 
-      // Send OTP verification request
-      const res = await api.post("/auth/verify-otp", { email, otp, password });
+//       // Send OTP verification request
+//       const res = await api.post("/auth/verify-otp", { email, otp, password });
 
-      // Extract user data and token from response
-      const { token, user } = res.data;
+//       // Extract user data and token from response
+//       const { token, user } = res.data;
 
-      // Store authentication token
-      localStorage.setItem("token", token);
-      localStorage.setItem("user_id", user.id);
+//       // Store authentication token
+//       localStorage.setItem("token", token);
+//       localStorage.setItem("user_id", user.id);
 
-      // Dispatch OTP verified action
-      dispatch(otpVerified());
+//       // Dispatch OTP verified action
+//       dispatch(otpVerified());
 
-      // Dispatch login success and update user state
-      dispatch(
-        loginSuccess({
-          user,
-          isAuthenticated: true, // Now user is authenticated
-          token,
-        })
-      );
+//       // Dispatch login success and update user state
+//       dispatch(
+//         loginSuccess({
+//           user,
+//           isAuthenticated: true, // Now user is authenticated
+//           token,
+//         })
+//       );
 
-      message.success({
-        content: " OTP Verified! Redirecting...",
-        duration: 2,
-      });      
-      // Redirect to dashboard
-      navigate("/app/dashboard");
+//       message.success({
+//         content: " OTP Verified! Redirecting...",
+//         duration: 2,
+//       });      
+//       // Redirect to dashboard
+//       navigate("/app/dashboard");
 
-      dispatch(switchLoading());
-    } catch (err: any) {
-      dispatch(switchLoading());
-      message.error({
-        content: err.response?.data?.message || "Invalid OTP, try again.",
-        duration: 3,
-      });    }
-  };
+//       dispatch(switchLoading());
+//     } catch (err: any) {
+//       dispatch(switchLoading());
+//       message.error({
+//         content: err.response?.data?.message || "Invalid OTP, try again.",
+//         duration: 3,
+//       });    }
+//   };
   export const resendOtp = (email: string) => async (dispatch: AppDispatch) => {
     try {
       dispatch(switchLoading());
@@ -205,36 +295,36 @@ export const getAllUser = () => async () => {
     );
   }
 };
-export const signup = (body: any, navigate: any) => async (dispatch: AppDispatch) => {
-  try {
-    dispatch(switchLoading());
+// export const signup = (body: any, navigate: any) => async (dispatch: AppDispatch) => {
+//   try {
+//     dispatch(switchLoading());
 
-    await api.post("/auth/sign-up-email", body);
+//     await api.post("/auth/sign-up-email", body);
 
-    message.success("OTP sent! Please check your email.");
-    dispatch(switchLoading());
+//     message.success("OTP sent! Please check your email.");
+//     dispatch(switchLoading());
 
-    // Store email in Redux state
-    dispatch(
-      loginSuccess({
-        user: { ...body }, // Store user data
-        isAuthenticated: false,
-        token: null,
-      })
-    );
+//     // Store email in Redux state
+//     dispatch(
+//       loginSuccess({
+//         user: { ...body }, // Store user data
+//         isAuthenticated: false,
+//         token: null,
+//       })
+//     );
 
-    //Store email in LocalStorage
-    localStorage.setItem("user_email", body.email);
+//     //Store email in LocalStorage
+//     localStorage.setItem("user_email", body.email);
 
-    // Ensure Redux updates before navigating
-    setTimeout(() => {
-      navigate("/auth/verify-otp");
-    }, 500);
-  } catch (err: any) {
-    dispatch(switchLoading());
-    message.error(err.response?.data?.error || "Signup failed.");
-  }
-};
+//     // Ensure Redux updates before navigating
+//     setTimeout(() => {
+//       navigate("/auth/verify-otp");
+//     }, 500);
+//   } catch (err: any) {
+//     dispatch(switchLoading());
+//     message.error(err.response?.data?.error || "Signup failed.");
+//   }
+// };
 
 // export const signup = (body: any) => async (dispatch: AppDispatch) => {
 //   try {
@@ -354,15 +444,55 @@ export const resetPasswordRequest =
 //     }
 //   };
 
-export const logout = () => async (dispatch: AppDispatch) => {
+// export const logout = () => async (dispatch: AppDispatch) => {
+//   try {
+//     await api.post("/auth/logout");
+//     dispatch(signOut());
+//     // localStorage.removeItem("token");
+//     // localStorage.removeItem("user_id");
+
+//     message.success("Successfully Logged out!");
+//   } catch (err: any) {
+//     message.error(err?.response?.data?.error);
+//   }
+// };
+// export const logout = () => async (dispatch: AppDispatch) => {
+//   try {
+//     await api.post("/auth/logout");
+
+//     dispatch(signOut());
+
+//     // Clear authentication-related data from localStorage
+//     localStorage.removeItem("token");
+//     localStorage.removeItem("user_id");
+//     localStorage.removeItem("user_email"); // ✅ Remove user_email
+
+//     message.success("Successfully Logged out!");
+//   } catch (err: any) {
+//     message.error(err?.response?.data?.error || "Logout failed.");
+//   }
+// };
+
+export const logout = (navigate: NavigateFunction) => async (dispatch: AppDispatch) => {
   try {
     await api.post("/auth/logout");
-    dispatch(signOut());
-    localStorage.removeItem("token");
-    localStorage.removeItem("user_id");
 
-    message.success("Successfully Logged out!");
+    //  Ensure Redux state updates before navigation
+    dispatch(signOut());
+
+    //  Wait for state update before navigating
+    setTimeout(() => {
+      // Clear authentication-related data from localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_id");
+      localStorage.removeItem("user_email"); 
+
+      message.success("Successfully Logged out!");
+
+      //  Redirect to home page after state updates
+      navigate("/");
+    }, 500); // Delay to ensure proper state update
   } catch (err: any) {
-    message.error(err?.response?.data?.error);
+    message.error(err?.response?.data?.error || "Logout failed.");
   }
 };

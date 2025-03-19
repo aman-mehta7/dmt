@@ -218,7 +218,7 @@ const SwitchRole = () => {
   const {
     user: { role },
   } = useSelector((state: RootAppState) => state.auth);
-
+console.log(role,'rrrrrrrrrrrrrrrr')
   return (
     <Button
       title={`Switch to ${role === "BUYER" ? "Seller" : "Buyer"}`}
@@ -235,7 +235,7 @@ const Logout = () => {
   const dispatch = useAppDispatch();
 
   const onLogout = () => {
-    dispatch(logout());
+    dispatch(logout(navigate));
     dispatch(clearPlaces());
     dispatch(clearEvents());
     navigate(`/auth/login`);
@@ -249,9 +249,13 @@ const Logout = () => {
 };
 
 const UserMenu = () => {
-  const {
-    user: { firstName, lastName },
-  } = useSelector((state: RootAppState) => state.auth);
+  // const {
+  //   user: { firstName, lastName },
+  // } = useSelector((state: RootAppState) => state.auth);
+  const { user } = useSelector((state: RootAppState) => state.auth) || {}; // Ensure user exists
+
+const firstName = user?.firstName || "";
+const lastName = user?.lastName || "";
 
   const fullName = firstName && lastName ? `${firstName} ${lastName}` : "User";
 
@@ -310,11 +314,13 @@ const NavLinks = ({
 );
 
 const Navbar: FC = () => {
-  const {
-    user: { role },
-    isAuthenticated,
-  } = useSelector((state: RootAppState) => state.auth);
+  // const {
+  //   user: { role },
+  //   isAuthenticated,
+  // } = useSelector((state: RootAppState) => state.auth);
+  const { user, isAuthenticated } = useSelector((state: RootAppState) => state.auth);
 
+  const role = user?.role || "BUYER"; // ✅ Ensures role is always defined
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => setOpen(!open);
 
