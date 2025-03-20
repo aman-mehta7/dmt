@@ -411,12 +411,29 @@ export const resendEmailVerification =
 //     });
 //   }
 // };
+export const resetPassword =
+  ({ token, password }: { token: string; password: string }, navigate: NavigateFunction) =>
+  async () => {
+    try {
+      console.log("Reset Password Request:", { token, password }); //  Log request
+
+      const response = await api.post("/auth/reset-password", { token, password });
+
+      console.log("Reset Password Response:", response.data); // Log response
+
+      message.success("Password reset successfully! Please log in.");
+      navigate("/auth/login"); //  Redirect after success
+    } catch (error: any) {
+      console.error("Reset Password Error:", error.response?.data || error.message); // Log error
+      message.error(error.response?.data?.message || "Password reset failed.");
+    }
+  };
 
 export const resetPasswordRequest =
   (body: any) => async (dispatch: AppDispatch) => {
     try {
       dispatch(switchLoading());
-      await api.post("/auth/forgotpassword", body);
+      await api.post("/auth/forgot-password", body);
       dispatch(switchLoading());
 
       message.success(
@@ -472,6 +489,29 @@ export const resetPasswordRequest =
 //     message.error(err?.response?.data?.error || "Logout failed.");
 //   }
 // };
+// ✅ Reset Password Request (Forgot Password)
+// export const resetPasswordRequest =
+//   (email: string) => async () => {
+//     try {
+//       await api.post("/auth/forgot-password", { email });
+//       message.success("Password reset link sent to your email!");
+//     } catch (error: any) {
+//       message.error(error.response?.data?.message || "Failed to send reset link.");
+//     }
+//   };
+
+// Reset Password
+// export const resetPassword =
+//   (token: string, password: string, navigate: NavigateFunction) =>
+//   async () => {
+//     try {
+//       await api.post("/auth/reset-password", { token, password });
+//       message.success("Password reset successfully! Please log in.");
+//       navigate("/auth/login");
+//     } catch (error: any) {
+//       message.error(error.response?.data?.message || "Password reset failed.");
+//     }
+//   };
 
 export const logout = (navigate: NavigateFunction) => async (dispatch: AppDispatch) => {
   try {
@@ -496,3 +536,4 @@ export const logout = (navigate: NavigateFunction) => async (dispatch: AppDispat
     message.error(err?.response?.data?.error || "Logout failed.");
   }
 };
+

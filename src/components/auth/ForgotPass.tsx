@@ -106,10 +106,11 @@ const ForgotPass = () => {
                       </div>
                     )}
 
-                    <Button
-                      title="Send Request"
-                      className="text-white w-full font-semibold mb-3"
-                    />
+<Button
+  title="Send Request"
+  onClick={formik.handleSubmit} // ✅ Calls Formik's submit handler
+  className="text-white w-full font-semibold mb-3"
+/>
 
                     <div className="text-sm ">
                       Remember your password now?{" "}

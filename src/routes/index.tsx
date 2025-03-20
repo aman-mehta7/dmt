@@ -45,7 +45,7 @@ const ConfirmEmailPage = Loadable(ConfirmEmail);
 const LoginPage = Loadable(lazy(() => import("../pages/auth/Loginpage")));
 const RegisterPage = Loadable(lazy(() => import("../pages/auth/RegisterPage")));
 const OtpVerify = Loadable(lazy(()=> import("../pages/auth/OtpVerify") ));
-
+const PasswordResetPage  = Loadable(lazy(()=> import("../pages/auth/PasswordResetPage")))
 // Dashboard pages
 const DashboardPage = Loadable(Dashboard);
 const StaysPage = Loadable(Stays);
@@ -106,6 +106,15 @@ export default function Router() {
             </GuestGuard>
           ),
         },
+        {
+          path: "reset-password",
+          element: (
+            <GuestGuard>
+              <PasswordResetPage />
+            </GuestGuard>
+          ),
+        },
+        
       ],
     },
     {
