@@ -4,6 +4,7 @@ interface Props {
   title: string;
   id?: string;
   icon?: ReactNode;
+  type?: "button" | "submit" | "reset"; // ✅ Added type support
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
@@ -15,6 +16,8 @@ const Button: FC<Props> = ({
   icon,
   title,
   id,
+  type = "button", //  Add default type
+
   onClick,
   className,
   disabled = false,
@@ -24,7 +27,9 @@ const Button: FC<Props> = ({
   return (
     <button
       id={id}
-      type={`button`}
+      // type={`button`}
+      type={type} //  Pass type correctly
+
       onClick={onClick}
       disabled={disabled}
       className={`${className} group ${
