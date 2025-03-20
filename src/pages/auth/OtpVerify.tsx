@@ -95,10 +95,10 @@ const OtpVerify: React.FC = () => {
 
   // Get email from Redux store or LocalStorage
   const email = useSelector(
-    (state: RootAppState) => state.auth.user?.email || localStorage.getItem("user_email") || ""
+    (state: RootAppState) => state.auth.user?.email|| ""
   );
   const password = useSelector(
-    (state: RootAppState) => state.auth.user?.password || localStorage.getItem("user_password") || ""
+    (state: RootAppState) => state.auth.user?.password || ""
   );
 
   // Handle OTP Verification
@@ -137,7 +137,7 @@ const OtpVerify: React.FC = () => {
   useEffect(() => {
     //  Reset authentication ONLY when the user navigates BACK
     const handleBeforeUnload = () => {
-      dispatch(logout());
+      dispatch(logout(navigate));
       localStorage.removeItem("token");
       localStorage.removeItem("email");
     };

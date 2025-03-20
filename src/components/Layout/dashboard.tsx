@@ -1,14 +1,6 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { ClientFooter, ClientNavbar } from "..";
 import { PiBookBookmark } from "react-icons/pi";
-import { MdOutlineEventAvailable } from "react-icons/md";
-import { MdRateReview } from "react-icons/md";
-import { GrTransaction } from "react-icons/gr";
-import { MdMeetingRoom } from "react-icons/md";
-import { CiWallet } from "react-icons/ci";
-import { LuTableProperties } from "react-icons/lu";
-import { CiMail } from "react-icons/ci";
-import { IoIosLogOut } from "react-icons/io";
 import { GiSpeedometer } from "react-icons/gi";
 import { MdOutlineBed, MdOutlineEmojiEvents } from "react-icons/md";
 import { LuUser } from "react-icons/lu";
@@ -23,16 +15,8 @@ import { RootAppState } from "../../redux/store";
 const navss = {
   BUYER: [
     { name: "Dashboard", href: "dashboard", icon: <GiSpeedometer /> },
-    { name: "Inbox", href: "inbox", icon: <CiMail /> },
-    { name: "Properties", href: "properties", icon: <LuTableProperties /> },
-    { name: "Events", href: "events", icon: <MdOutlineEventAvailable />},
-    { name: "Rooms", href: "inbox", icon: <MdMeetingRoom /> },
-    { name: "Reservations", href: "reservation", icon: <PiBookBookmark /> },
-    { name: "Payouts", href: "inbox", icon: <CiWallet />},
-    { name: "Transactions", href: "inbox", icon: <GrTransaction />},
     { name: "Profile", href: "profile", icon: <LuUser /> },
-    { name: "Reviews", href: "profile", icon: <MdRateReview />    },
-    { name: "Logout", href: "profile", icon: <IoIosLogOut /> },
+    { name: "Reservations", href: "reservation", icon: <PiBookBookmark /> },
   ],
   SELLER: [
     { name: "Dashboard", href: "dashboard", icon: <GiSpeedometer /> },
@@ -91,9 +75,7 @@ const navss = {
 
 const DashboardNav = () => {
   const role = (useSelector((state: RootAppState) => state.auth.user.role) || "BUYER") as keyof typeof navss;
-  console.log(role);
-  // const navs = navss[role] || navss.BUYER;
-  const navs =  navss.BUYER;
+  const navs = navss[role] || navss.BUYER;
   return (
     <ul className="flex flex-col flex-1 border-r-2 border-[#E2E2E2] max-w-[80px] lg:max-w-[300px]">
       {navs.map((nav, i) => (

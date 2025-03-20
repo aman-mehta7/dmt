@@ -35,9 +35,10 @@ const userInitState: UserModel = {
 
 const initialState: IinitialState = {
   token: localStorage.getItem("token"),
-  isAuthenticated: false,
+  // isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem("token"),
   loading: false,
-  user: userInitState,
+  user: userInitState || {}, //  Ensures `user` is always an object
   isWhatsappCodeSend: false,
   rediectToLogin: false,
   isOtpVerified: false, // New state for OTP verification
@@ -69,13 +70,19 @@ const AuthSlice = createSlice({
     toggleWhatsappCode: (state) => {
       state.isWhatsappCodeSend = !state.isWhatsappCodeSend;
     },
+    // loginSuccess: (state, { payload }) => {
+    //   return {
+    //     ...state,
+    //     ...payload,
+    //     isAuthenticated: payload.isAuthenticated ?? state.isAuthenticated, // Keep it false until OTP is verified
+    //     loading: false,
+    //   };
+    // },
     loginSuccess: (state, { payload }) => {
-      return {
-        ...state,
-        ...payload,
-        isAuthenticated: payload.isAuthenticated ?? state.isAuthenticated, // Keep it false until OTP is verified
-        loading: false,
-      };
+      state.user = payload.user;
+      state.isAuthenticated = payload.isAuthenticated;
+      state.token = payload.token;
+      state.loading = false;
     },
     signOut: (state) => {
       return {
@@ -84,7 +91,15 @@ const AuthSlice = createSlice({
         loading: false,
         user: userInitState,
         isAuthenticated: false,
+        isOtpVerified: false, // ✅ Ensure OTP verification resets on logout
       };
+    // signOut: (state) => {
+    //   state.token = null;
+    //   state.isAuthenticated = false;
+    //   state.isOtpVerified= false, // ✅ Ensure OTP verification resets on logout
+
+    //   state.user = {} as UserModel;
+    // // },
     },
   },
 });

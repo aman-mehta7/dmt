@@ -4,6 +4,7 @@ import { AppDispatch } from "../store";
 import api from "../../api";
 import { message } from "antd";
 import { setUser } from "../reducers/auth";
+import { RootAppState } from "../../redux/store";
 
 const user_id = localStorage.getItem("user_id");
 
@@ -35,7 +36,8 @@ export const getUser = (userId: number) => async (dispatch: AppDispatch) => {
 
 export const updateUser = (body: any) => async (dispatch: AppDispatch) => {
   try {
-    const { firstName, lastName, phoneNumber, selectedCountry } = body;
+    // const { firstName, lastName, phoneNumber, selectedCountry } = body;
+    const { firstName, lastName, phoneNumber } = body;
 
     const res: any = await api.patch(`/users/${user_id}`, {
       firstName,
@@ -61,24 +63,63 @@ export const updateUser = (body: any) => async (dispatch: AppDispatch) => {
   }
 };
 
-export const updateUserRole = () => async (dispatch: AppDispatch) => {
-  try {
-    await dispatch(getUser(Number(user_id)));
-    const {
-      data: {
-        data: { user },
-      },
-    }: any = await api.get(`/users/switch/${user_id}`);
+// export const updateUserRole = () => async (dispatch: AppDispatch) => {
+//   try {
+//     await dispatch(getUser(Number(user_id)));
+//     const {
+//       data: {
+//         data: { user },
+//       },
+//     }: any = await api.get(`/users/switch/${user_id}`);
 
-    dispatch(setUser(user));
-    return user;
+//     dispatch(setUser(user));
+//     return user;
+//   } catch (err: any) {
+//     message.error(
+//       err.response.data?.message ===
+//         "Forbidden! Provided Role : BUYER. Allowed Roles : SELLER."
+//         ? `Switch to SELLER`
+//         : err.response.data?.message
+//     );
+//   }
+// };
+
+export const updateUserRole = () => async (dispatch: AppDispatch, getState: () => RootAppState) => {
+  try {
+    // Get user ID from Redux state instead of localStorage
+    const user_id = getState().auth.user?.id;
+
+    if (!user_id) {
+      message.error("User ID not found. Please log in again.");
+      return null;
+    }
+
+    console.log(`Switching role for user: ${user_id}`);
+
+    // API request to switch role
+    const response: any = await api.get(`/users/switch/${user_id}`);
+
+    console.log("API Response:", response); // ✅ Log full response
+
+    const updatedUser = response?.data?.data?.user;
+
+    if (!updatedUser) {
+      message.error("Failed to switch user role.");
+      return null;
+    }
+
+    console.log(`Updated Role: ${updatedUser.role}`); // ✅ Log new role
+
+    dispatch(setUser(updatedUser));
+
+    // Refresh user details
+    await dispatch(getUser(user_id));
+
+    return updatedUser;
   } catch (err: any) {
-    message.error(
-      err.response.data?.message ===
-        "Forbidden! Provided Role : BUYER. Allowed Roles : SELLER."
-        ? `Switch to SELLER`
-        : err.response.data?.message
-    );
+    console.error("Error switching role:", err);
+    message.error(err.response?.data?.message || "Failed to switch role.");
+    return null;
   }
 };
 

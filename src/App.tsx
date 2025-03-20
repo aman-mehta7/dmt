@@ -11,13 +11,26 @@ import { useEffect } from "react";
 function App() {
   const loading = useSelector((state: RootAppState) => state.ui.loading);
   const token = useSelector((state: RootAppState) => state.auth.token);
-
+  // useEffect(() => {
+  //   const storedToken = localStorage.getItem("token");
+  
+  //   if (!storedToken || storedToken === "undefined" || storedToken === "null") {
+  //     persistor.purge(); // Purge only if no valid token
+  //     localStorage.removeItem("persist:auth"); // Clear only auth state
+  //   }
+  // }, [token]);
   useEffect(() => {
-    if (!token) {
-      persistor.purge(); // Purge only if no token
-      localStorage.removeItem("persist:auth"); // Clear only auth state, not the entire persist
+    if (!token || token === "undefined" || token === "null") {
+      persistor.purge(); // Purge auth state only
+      localStorage.removeItem("persist:auth");
     }
-  }, [token]); // Run only when token changes
+  }, [token]);
+  // useEffect(() => {
+  //   if (!token||token==='') {
+  //     persistor.purge(); // Purge only if no token
+  //     localStorage.removeItem("persist:auth"); // Clear only auth state, not the entire persist
+  //   }
+  // }, [token]); // Run only when token changes
   return (
     <>
       <Toaster
