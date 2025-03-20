@@ -19,22 +19,22 @@ import api from "../../api";
 import { NavigateFunction } from "react-router-dom"; // Import NavigateFunction type
 
 
-// interface LoginResponse {
-//   token: string;
-//   user: {
-//     id: number;
-//     firstName: string;
-//     lastName: string;
-//     email: string;
-//   };
-// }
+interface LoginResponse {
+  token: string;
+  user: {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
 
 // Define the login success payload structure
-// interface LoginSuccessPayload {
-//   user: LoginResponse['user'];
-//   isAuthenticated: boolean;
-//   token: string;
-// }
+interface LoginSuccessPayload {
+  user: LoginResponse['user'];
+  isAuthenticated: boolean;
+  token: string;
+}
 
 export const login =
   (email: string, password: string) => async (dispatch: AppDispatch) => {

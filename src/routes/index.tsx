@@ -2,7 +2,7 @@
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import GuestGuard from "../components/guards/GuestGuard";
-// import AuthGuard from "../components/guards/AuthGuard";
+import AuthGuard from "../components/guards/AuthGuard";
 import ForgotPass from "../components/auth/ForgotPass";
 import { ClientLayout, DashboardLayout, Loader } from "../components";
 import {
@@ -69,9 +69,9 @@ export default function Router() {
         {
           path: "login",
           element: (
-            // <GuestGuard>
+            <GuestGuard>
             <LoginPage />
-            // </GuestGuard>
+            </GuestGuard>
           ),
         },
         {
@@ -112,9 +112,9 @@ export default function Router() {
       path: "app",
       element: (
         <>
-          {/* <AuthGuard> */}
+          <AuthGuard>
           <DashboardLayout />
-          {/* </AuthGuard> */}
+          </AuthGuard>
         </>
       ),
       children: [
