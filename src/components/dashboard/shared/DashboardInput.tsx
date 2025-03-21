@@ -136,14 +136,14 @@ const DashboardInput: FC<Props> = ({
     {title && <h3 className="text-dark-blue text-base font-semibold">{title}</h3>}
     {subTitle && <h5 className="text-gray text-sm mt-1">{subTitle}</h5>}
 
-    <div className={`border border-fade-white rounded-lg py-3 px-4 ${title?.length ? "mt-2" : ""} w-full`}>
+    <div className={`border border-fade-white rounded-lg ${title?.length ? "mt-2" : ""} w-full`}>
       {type === "textarea" ? (
         <TextArea
           rows={6}
           name={name}
           value={value}
           maxLength={maxLength}
-          className={`p-0 ${error ? "border-red-500" : ""}`}
+          className={`p-4 w-full border-light-primary border ${error ? "border-red-500" : ""}`}
           onChange={onChange}
           onBlur={onBlur}
           minLength={minLength}
@@ -158,7 +158,7 @@ const DashboardInput: FC<Props> = ({
           disabled={disabled}
           onChange={onChange}
           onBlur={onBlur}
-          className={`mt-1 p-0 w-full ${error ? "border-red-500" : ""}`}
+          className={`p-4 w-full border-light-primary border ${error ? "border-red-500" : ""}`}
           placeholder={placeholder}
           maxLength={maxLength}
         />

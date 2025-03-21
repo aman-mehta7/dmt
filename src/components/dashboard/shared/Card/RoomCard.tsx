@@ -10,7 +10,7 @@ const RoomCard: FC<{ data?: RoomModel }> = ({ data }) => {
 
   return (
     <div
-      className={`rounded-xl shadow-xl border hover:border-primary smooth overflow-hidden`}
+      className={`rounded-xl shadow-xl hover:border-primary smooth overflow-hidden`}
     >
       <img
         src={Images.download_bg}
@@ -43,7 +43,7 @@ const RoomCard: FC<{ data?: RoomModel }> = ({ data }) => {
           </h4>
         </div>
         <div className={`flex items-center justify-between w-full`}>
-          <div className={`flex gap-2 items-center`}>
+          <div className={`gap-2 items-center`}>
             <h3
               className={`text-xl font-medium text-dark-blue`}
             >{`$${data?.price}`}</h3>

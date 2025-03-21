@@ -259,3 +259,10 @@ body::-webkit-scrollbar-thumb:hover {
 .rc-virtual-list-holder-inner {
   gap: 0.2rem !important;
 }
+
+
+.input-design{
+  border: 1px solid var(--light-primary);
+  padding: 10px;
+  width: 100%;
+}

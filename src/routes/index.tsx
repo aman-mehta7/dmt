@@ -2,7 +2,7 @@
 import { Suspense, lazy } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import GuestGuard from "../components/guards/GuestGuard";
-import AuthGuard from "../components/guards/AuthGuard";
+// import AuthGuard from "../components/guards/AuthGuard";
 import ForgotPass from "../components/auth/ForgotPass";
 import { ClientLayout, DashboardLayout, Loader } from "../components";
 import {
@@ -70,7 +70,7 @@ export default function Router() {
           path: "login",
           element: (
             <GuestGuard>
-            <LoginPage />
+              <LoginPage />
             </GuestGuard>
           ),
         },
@@ -121,9 +121,9 @@ export default function Router() {
       path: "app",
       element: (
         <>
-          <AuthGuard>
-          <DashboardLayout />
-          </AuthGuard>
+          {/* <AuthGuard> */}
+            <DashboardLayout />
+          {/* </AuthGuard> */}
         </>
       ),
       children: [
@@ -135,8 +135,12 @@ export default function Router() {
         { path: "stays", element: <StaysPage /> },
         { path: "events/:id/details", element: <EventsDetailsPage /> },
         { path: "stays/:id/details", element: <StaysDetailsPage /> },
-        { path: "stays/:id/rooms", element: <StaysRoomsPage /> },
-        { path: "stays/:id/rooms/create", element: <StaysAddRoomPage /> },
+        // { path: "stays/:id/rooms", element: <StaysRoomsPage /> },
+        { path: "rooms", element: <StaysRoomsPage /> },
+        
+        // { path: "stays/:id/rooms/create", element: <StaysAddRoomPage /> },
+        { path: "rooms/create", element: <StaysAddRoomPage /> },
+
         {
           path: "stays/:id/rooms/edit/:editId",
           element: <StaysEditRoomPage />,

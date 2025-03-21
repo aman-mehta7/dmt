@@ -2,10 +2,11 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { ClientFooter, ClientNavbar } from "..";
 import { PiBookBookmark } from "react-icons/pi";
 import { GiSpeedometer } from "react-icons/gi";
-import { MdOutlineBed, MdOutlineEmojiEvents } from "react-icons/md";
+import { MdMeetingRoom, MdOutlineBed, MdOutlineEmojiEvents } from "react-icons/md";
 import { LuUser } from "react-icons/lu";
 import { useSelector } from "react-redux";
 import { RootAppState } from "../../redux/store";
+// import { StaysRoomsPage } from "../../pages";
 // import { useAppDispatch, useAppSelector } from "../../hooks/useTypedSelectors";
 // import { RootAppState } from "../../redux/store";
 // import { useEffect } from "react";
@@ -22,6 +23,7 @@ const navss = {
     { name: "Dashboard", href: "dashboard", icon: <GiSpeedometer /> },
     { name: "Profile", href: "profile", icon: <LuUser /> },
     { name: "Stays", href: "stays", icon: <MdOutlineBed /> },
+    { name: "Rooms", href: "rooms", icon: <MdMeetingRoom /> },
     { name: "Events", href: "events", icon: <MdOutlineEmojiEvents /> },
     { name: "Reservations", href: "reservation", icon: <PiBookBookmark /> },
   ],
