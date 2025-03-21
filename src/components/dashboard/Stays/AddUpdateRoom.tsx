@@ -1,362 +1,127 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Dropdown, RadioChangeEvent, Select, Space, message } from "antd";
-import { FC, useEffect, useState } from "react";
-import { CiSquarePlus } from "react-icons/ci";
-import { roomTypes } from "../../../lib/constants/dashboard";
+import { Formik, Form, Field, FieldArray, ErrorMessage } from "formik";
+// import * as Yup from "yup";
+import { Form as AntForm, Input, InputNumber, Switch } from "antd";
 import Button from "../../shared/Button";
-import TabIntro from "../shared/TabIntro";
-import { MdOutlineBed } from "react-icons/md";
-import { DownOutlined } from "@ant-design/icons";
-import DashboardInput from "../shared/DashboardInput";
-import { BedModel, RoomModel } from "../../../types/places";
-import { useObjectValidation } from "../../../hooks";
-import { useAppDispatch } from "../../../hooks/useTypedSelectors";
-import { createRoom, updateRoom } from "../../../redux/actions/places";
-import { AddUpdateBed, ImageUploader, RadioBox } from "../..";
-import { discount } from "../../../lib/constants/events";
-import { initRoomState, initBedState } from "../../../lib/constants/stays";
-import { useNavigate, useParams } from "react-router";
 
-interface Props {
-  data?: RoomModel;
-  roomId?: number;
-  method: "add" | "update";
-  roomData?: (value: RoomModel) => void;
-}
+// const validationSchema = Yup.object().shape({
+//   place_id: Yup.number().required("Place ID is required"),
+//   title: Yup.string().required("Title is required"),
+//   price: Yup.number().required("Price is required").min(0, "Price must be positive"),
+//   stock: Yup.number().required("Stock is required").min(0, "Stock must be positive"),
+//   room_type: Yup.string().required("Room type is required"),
+//   beds: Yup.array().of(
+//     Yup.object().shape({
+//       bed_type: Yup.string().required("Bed type is required"),
+//       amount: Yup.number().required("Amount is required").min(1, "Must have at least 1 bed"),
+//     })
+//   ),
+//   isDiscountAvailable: Yup.boolean(),
+//   discount: Yup.number().when("isDiscountAvailable", {
+//     is: true,
+//     then: (schema) => schema.required("Discount is required").min(1, "Discount must be at least 1"),
+//     otherwise: (schema) => schema.notRequired(),
+//   }),
+//   transferService: Yup.string().required("Transfer service is required"),
+//   extraAmount: Yup.number().min(0, "Extra amount must be positive"),
+// });
 
-const AddUpdateRoom: FC<Props> = ({ method, data, roomId, roomData }) => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { id: placeId } = useParams();
-  const { validate } = useObjectValidation();
-  const [roomState, setRoomState] = useState<RoomModel>({
-    ...initRoomState,
-    room_type: roomTypes[0].label,
-  });
-  const [bedState, setBedState] = useState<BedModel[]>(initRoomState.beds);
-
-  useEffect(() => {
-    if (method === "update" && data) {
-      setRoomState({
-        ...data,
-        extraAmount: Number(data.extraAmount),
-        isDiscountAvailable: data.isDiscountAvailable ? "yes" : "no",
-      });
-      setBedState(data.beds);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (roomData) {
-      roomData(roomState);
-    }
-  }, [roomState]);
-
-  const onRadioChange = (e: RadioChangeEvent, type: string) => {
-    setRoomState((prevState) => {
-      return {
-        ...prevState,
-        [type]: e.target.value,
-      };
-    });
-  };
-
-  const onChangeHandler = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-
-    setRoomState({ ...roomState, [name]: value });
-  };
-
-  const handleSuccess = () => {
-    navigate(`/app/stays/${placeId}/rooms`);
-    setBedState([initBedState]);
-    setRoomState(initRoomState);
-  };
-
-  const submitRoom = async () => {
-    const {
-      beds,
-      id,
-      place_id,
-      price,
-      stock,
-      extraAmount,
-      transferService,
-      isDiscountAvailable,
-      discount,
-      ...rest
-    } = roomState;
-
-    if (isDiscountAvailable === "yes") {
-      if (!discount) {
-        message.error("Discount is required");
-        return;
-      }
-    }
-
-    if (roomState.stock === 0) {
-      message.error("Stock must be more than 1");
-      return;
-    }
-
-    const isValid = validate(rest);
-
-    if (!isValid.length && placeId) {
-      const data = {
-        beds: bedState,
-        transferService,
-        place_id: Number(placeId),
-        price: Number(price),
-        stock: Number(stock),
-        discount: isDiscountAvailable === "yes" ? Number(discount) : 0,
-        isDiscountAvailable: isDiscountAvailable === "yes" ? true : false,
-        ...rest,
-      };
-
-      const isExtraAmtIncluded = Number(extraAmount) === 0;
-
-      const postData = !isExtraAmtIncluded
-        ? {
-            ...data,
-            extraAmount: Number(extraAmount),
-          }
-        : data;
-
-      if (method === "add") {
-        const success = await dispatch(createRoom(postData));
-        return success && handleSuccess();
-      } else if (method === "update") {
-        const { createdAt, beds, ...rest } = postData as any;
-
-        const updateData = {
-          ...rest,
-          beds: beds.map(({ bed_type, amount }: BedModel) => {
-            return {
-              bed_type,
-              amount,
-            };
-          }),
-        };
-
-        const success = await dispatch(
-          updateRoom(roomId as number, updateData)
-        );
-        return success && handleSuccess();
-      }
-    }
-  };
-
+const RoomForm = () => {
   return (
-    <div>
-      <div className={`flex items-center justify-between`}>
-        <h1 className={`text-2xl text-dark-blue font-semibold`}>
-          {method === "add" ? `Create A New Room Type` : roomState.title}
-        </h1>
-        <Button
-          title={method === "add" ? `Create` : `Update`}
-          variant="filled"
-          onClick={submitRoom}
-          icon={<MdOutlineBed className={`group-hover:text-primary`} />}
-        />
-      </div>
-      <div className={`bg-white p-6 rounded shadow-md mt-6`}>
-        <TabIntro
-          title={`Basic Room information`}
-          intro={`Let guests know more about the room.`}
-        />
-        <div className={`flex gap-6`}>
-          <div className={`w-2/4`}>
-            <div
-              className={`border border-fade-white rounded-lg py-3 px-4 mt-2 w-full`}
-            >
-              <h5 className={`text-light-gray mb-1`}>Room Type</h5>
-              <Dropdown
-                trigger={["click"]}
-                menu={{
-                  items: roomTypes,
-                  onClick: ({ key }) =>
-                    setRoomState({
-                      ...roomState,
-                      room_type: key,
-                    }),
-                }}
-                className={`cursor-pointer`}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space className={`flex items-center justify-between w-full`}>
-                    <h5 className={`text-dark-gray capitalize`}>
-                      {roomState?.room_type}
-                    </h5>
-                    <DownOutlined className={`text-dark-gray text-sm`} />
-                  </Space>
-                </a>
-              </Dropdown>
-            </div>
-            <DashboardInput
-              name="title"
-              title="Title"
-              className={`mt-2`}
-              value={roomState.title}
-              placeholder="Enter Room Name"
-              onChange={onChangeHandler}
-            />
-            {/* <DashboardInput
-              name="description"
-              input="textarea"
-              className={`mt-2`}
-              placeholder="Enter Province"
-              onChange={onChangeHandler}
-            /> */}
-            <DashboardInput
-              name="stock"
-              title="Stock"
-              className={`mt-2`}
-              placeholder="Enter Stock"
-              onChange={onChangeHandler}
-              value={String(roomState.stock)}
-            />
-            <h3
-              className={`text-dark-blue text-base font-semibold mt-4`}
-            >{`Transfer Service`}</h3>
-            <Select
-              defaultValue="NOT INCLUDED"
-              style={{ width: `100%`, height: 40 }}
-              onChange={(value) =>
-                setRoomState({
-                  ...roomState,
-                  transferService: value,
-                })
-              }
-              className={`border border-fade-white rounded-lg mt-2`}
-              options={[
-                { value: "NOT_INCLUDED", label: "NOT INCLUDED" },
-                { value: "INCLUDED", label: "INCLUDED" },
-                { value: "EXTRA_COST", label: "EXTRA COST" },
-              ]}
-            />
-          </div>
-          <div className={`w-2/4`}>
-            <h3 className={`text-dark-blue text-base font-semibold`}>Photos</h3>
-            <h5 className={`text-gray text-sm mt-1`}>
-              Add photos to show off your room, especially where guests are
-              staying.
-            </h5>
-            <ImageUploader
-              className={`mt-10`}
-              // imageFiles={addPlaceDetails.images}
-              // onImagesSelected={(files) =>
-              //   dispatch(
-              //     createPlace({
-              //       ...addPlaceDetails,
-              //       images: files,
-              //     })
-              //   )
-              // }
-            />
-          </div>
-        </div>
-      </div>
+    <Formik
+      initialValues={{
+        place_id: 0,
+        title: "",
+        price: 0,
+        stock: 0,
+        room_type: "",
+        beds: [{ bed_type: "", amount: 1 }],
+        isDiscountAvailable: false,
+        discount: 0,
+        transferService: "",
+        extraAmount: 0,
+      }}
+      // validationSchema={validationSchema}
+      onSubmit={(values) => {
+        console.log("Form Submitted", values);
+      }}
+    >
+      {({ values, setFieldValue }) => (
+        <AntForm layout="vertical" onFinish={() => {}}>
+          <h1 className="font-bold text-3xl mb-3 text-center">Create a Room</h1>
+          <Form>
+            <AntForm.Item className="error mb-2" label="Place ID" help={<ErrorMessage name="place_id" component="div" />}>
+              <Field className="input-design" as={InputNumber} name="place_id" onChange={(value: number | null) => setFieldValue("place_id", value ?? 0)} />
+            </AntForm.Item>
 
-      <div
-        className={`bg-white p-6 rounded-lg border border-fade-white shadow-md mt-6`}
-      >
-        <TabIntro
-          title={`Beds and occupancy`}
-          intro={`Assign number of beds and their type.`}
-        />
+            <AntForm.Item label="Title" help={<ErrorMessage name="title" component="div" className="error" />}>
+              <Field as={Input} name="title" className="input-design" />
+            </AntForm.Item>
 
-        {bedState.length > 0 && (
-          <div className={`grid grid-flow-row grid-cols-2 gap-4 mt-6`}>
-            {bedState.map((data, i: number) => (
-              <AddUpdateBed
-                key={i}
-                index={i}
-                data={data}
-                method="update"
-                bedData={(value: BedModel, index: number) => {
-                  setBedState((prevBedState) => {
-                    const updatedBedState = [...prevBedState];
-                    updatedBedState[index] = value;
-                    return updatedBedState;
-                  });
-                }}
-                onRemove={(index: number) => {
-                  setBedState(() => {
-                    const updatedBedState = bedState.filter(
-                      (_, ind) => index !== ind
-                    );
-                    return updatedBedState;
-                  });
-                }}
-              />
-            ))}
-          </div>
-        )}
+            <AntForm.Item label="Price" help={<ErrorMessage name="price" component="div" className="error" />}>
+              <Field className="input-design" as={InputNumber} name="price" onChange={(value: number | null) => setFieldValue("price", value ?? 0)} />
+            </AntForm.Item>
 
-        <Button
-          variant="outline"
-          className={`my-6`}
-          onClick={() => setBedState([...bedState, initBedState])}
-          icon={
-            <CiSquarePlus className={`text-primary group-hover:text-white`} />
-          }
-          title={`Add New Bed`}
-        />
-      </div>
-      <div
-        className={`bg-white p-6 rounded-lg border border-fade-white shadow-md mt-6 w-full`}
-      >
-        <TabIntro
-          title={`Rate details`}
-          intro={`Let guests know more about the service.`}
-        />
+            <AntForm.Item label="Stock" help={<ErrorMessage name="stock" component="div" className="error" />}>
+              <Field className="input-design" as={InputNumber} name="stock" onChange={(value: number | null) => setFieldValue("stock", value ?? 0)} />
+            </AntForm.Item>
 
-        <div className={`flex gap-6 items-start justify-center w-full`}>
-          <DashboardInput
-            name="price"
-            title="Price"
-            placeholder="Enter Price"
-            value={String(roomState.price)}
-            onChange={onChangeHandler}
-          />
+            <AntForm.Item label="Room Type" help={<ErrorMessage name="room_type" component="div" className="error" />}>
+              <Field className="input-design" as={Input} name="room_type" />
+            </AntForm.Item>
 
-          <DashboardInput
-            name="extraAmount"
-            title="Extra Amount"
-            placeholder="Enter extra amount"
-            value={String(roomState.extraAmount)}
-            onChange={onChangeHandler}
-          />
-
-          <div className={`border-2 border-fade-white p-4 rounded-lg w-full`}>
-            <h3 className={`text-dark-blue mb-3 font-semibold`}>
-              Discount Available
-            </h3>
-            <div className={`flex gap-10 items-center w-full`}>
-              <RadioBox
-                items={discount}
-                onChange={(e: RadioChangeEvent) =>
-                  onRadioChange(e, "isDiscountAvailable")
-                }
-                value={roomState.isDiscountAvailable}
-              />
-              {roomState.isDiscountAvailable === "yes" && (
-                <DashboardInput
-                  name={`discount`}
-                  placeholder="Enter discount"
-                  value={String(roomState.discount)}
-                  onChange={onChangeHandler}
-                />
+            <FieldArray name="beds">
+              {({ push, remove }) => (
+                <>
+                  {values.beds.map((_, index) => (
+                    <div key={index} className="flex gap-3 items-center">
+                      <AntForm.Item className="w-full error" label="Bed Type" help={<ErrorMessage name={`beds.${index}.bed_type`} component="div" />}>
+                        <Field className="input-design" as={Input} name={`beds.${index}.bed_type`} />
+                      </AntForm.Item>
+                      <AntForm.Item className="error w-full" label="Amount" help={<ErrorMessage name={`beds.${index}.amount`} component="div"  />}>
+                        <Field
+                        className="input-design"
+                          as={InputNumber}
+                          name={`beds.${index}.amount`}
+                          onChange={(value: number | null) => setFieldValue(`beds.${index}.amount`, value ?? 1)}
+                        />
+                      </AntForm.Item>
+                      {values.beds.length > 1 && (
+                        <button className="border p-3 border-danger text-danger rounded-md" onClick={() => remove(index)}>
+                          -
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <Button className="mb-2" onClick={() => push({ bed_type: "", amount: 1 })} title="+ Add Bed"></Button>
+                </>
               )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            </FieldArray>
+
+            <AntForm.Item label="Discount Available">
+              <Switch checked={values.isDiscountAvailable} onChange={(checked) => setFieldValue("isDiscountAvailable", checked)} />
+            </AntForm.Item>
+
+            {values.isDiscountAvailable && (
+              <AntForm.Item label="Discount" help={<ErrorMessage name="discount" component="div" className="error" />}>
+                <Field className="input-design" as={InputNumber} name="discount" onChange={(value: number | null) => setFieldValue("discount", value ?? 0)} />
+              </AntForm.Item>
+            )}
+
+            <AntForm.Item label="Transfer Service" help={<ErrorMessage name="transferService" component="div" className="error" />}>
+              <Field className="input-design" as={Input} name="transferService" />
+            </AntForm.Item>
+
+            <AntForm.Item label="Extra Amount" help={<ErrorMessage name="extraAmount" component="div" className="error" />}>
+              <Field className="input-design" as={InputNumber} name="extraAmount" onChange={(value: number | null) => setFieldValue("extraAmount", value ?? 0)} />
+            </AntForm.Item>
+
+            <Button type="submit" title="Submit" variant="filled">
+            </Button>
+          </Form>
+        </AntForm>
+      )}
+    </Formik>
   );
 };
 
-export default AddUpdateRoom;
+export default RoomForm;
