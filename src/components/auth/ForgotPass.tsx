@@ -63,7 +63,8 @@ import { AppDispatch } from "../../redux/store";
 import { useDispatch } from "react-redux";
 import { resetPasswordRequest } from "../../redux/actions/auth";
 import { Logo } from "../../assets";
-import { Button, DashboardInput } from "..";
+import Button  from "../shared/Button";
+import DashboardInput from "../dashboard/shared/DashboardInput";
 
 const ForgotPass = () => {
   const dispatch: AppDispatch = useDispatch();
@@ -79,15 +80,16 @@ const ForgotPass = () => {
 }});
 
   return (
-    <div className="w-full h-full pt-20">
-      <div className="w-full h-full">
-        <div className="flex-1 bg-white flex items-center justify-center">
-          <div className="w-full h-[60%] flex flex-col justify-center items-center px-0 md:px-14 mt-36">
+    <div className="w-full h-full">
+      <div className="w-full flex justify-center items-center h-[100vh]">
+        <div className="flex-1 bg-white flex items-center justify-center  max-w-max">
+          <div className="w-full flex flex-col justify-center items-center px-0 md:px-14">
             <img src={Logo.logo_purple} className="w-[200px]" alt="dmt_logo" />
-            <div className="card max-w-[450px] md:max-w-[500px] w-full h-full px-5 md:px-6">
-              <h1 className="font-semibold text-center text-3xl py-2">
+            <div className="card max-w-[450px] md:max-w-[500px] w-full h-full px-5  md:px-6">
+              <h1 className="font-semibold text-center text-3xl pb-1">
                 Forgot Password
               </h1>
+              <p className="text-gray text-center">Enter your email address to reset your password.</p>
               <FormikProvider value={formik}>
                 <form onSubmit={formik.handleSubmit}>
                   <div className="w-full mt-4">
@@ -97,6 +99,7 @@ const ForgotPass = () => {
                       value={formik.values.email}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
+                      placeholder="Your email"
                     />
 
                     {/* Add error display */}
@@ -106,15 +109,16 @@ const ForgotPass = () => {
                       </div>
                     )}
 
-<Button
-  title="Send Request"
-  onClick={formik.handleSubmit} // ✅ Calls Formik's submit handler
-  className="text-white w-full font-semibold mb-3"
-/>
+                    <Button
+                      title="Send Request"
+                      variant="filled"
+                      onClick={formik.handleSubmit} // ✅ Calls Formik's submit handler
+                      className="text-white w-full font-semibold mb-3 mt-3"
+                    />
 
                     <div className="text-sm ">
                       Remember your password now?{" "}
-                      <Link to={"/auth/login"} className="text-purple">
+                      <Link to={"/auth/login"} className="text-primary font-bold">
                         Signin
                       </Link>
                     </div>
