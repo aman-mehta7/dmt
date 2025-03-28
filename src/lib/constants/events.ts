@@ -210,7 +210,7 @@ export const initEventDatePicker: DateRangeModel = {
 };
 
 export const initEventDetailsState: EventModel = {
-  id: 0,
+  id: 1,
   photos: [],
   location: "",
   businessNature: "INDIVIDUAL",

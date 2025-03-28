@@ -35,18 +35,49 @@ export interface Place extends Listing {
 }
 
 /* ROOM TYPES */
-export type RoomType = "suite" | "penthouse" | "single" | "double" | "triple";
-export type BedType = "twin" | "full" | "queen" | "king";
+// export type RoomType = "suite" | "penthouse" | "single" | "double" | "triple";
+// export type BedType = "twin" | "full" | "queen" | "king";
+
+// export interface Bed {
+//   bed_type: string;
+//   amount: number;
+// }
+
+// export enum RoomType {
+//   SINGLE = "SINGLE",
+//   DOUBLE = "DOUBLE",
+//   SUITE = "SUITE",
+//   DELUXE = "DELUXE",
+// }
+export type RoomType="SINGLE"|"DOUBLE"|"SUITE"|"DELUXE"
+export type BedType = "SINGLE_BED" | "DOUBLE_BED" | "QUEEN_BED" | "KING_BED"|"SOFA_BED";
 
 export interface Room {
+  // id: number;
+  // name: string;
+  // beds: Bed[]; // Use singular "Bed" for consistency
+  // price: number;
+  // quantity: number;
+  // images?: string[]; // Changed to array for multiple images
+  // roomType?: RoomType;
+  // stock: number;
+  // title:string;
   id: number;
-  name: string;
-  beds: Beds[];
+  place_id: number;
+  title: string;
   price: number;
-  quantity: number;
-  images?: string;
-  roomType?: RoomType;
   stock: number;
+  room_type: RoomType;
+  beds: Bed[];
+  isDiscountAvailable: boolean;
+  discount?: number;
+  transferService: TransferService;
+  extraAmount?: number;
+  // images: string[]; 
+  // images: (string | File)[]; //  Supports both existing URLs & new uploads
+  images: File[]; //  Only store new files here
+
+
 }
 
 export interface Beds {
@@ -99,4 +130,15 @@ export interface CreatePlace {
   place_type?: string;
   booking_policy?: "FLEXIBLE";
   images?: [];
+}
+interface UpdateRoomArgs {
+  roomId: number;
+  body: FormData;  // 'FormData' is used here for the body of the request
+  files: Express.Multer.File[];  // This will be the array of files
+}
+
+// Define the return type for the thunk (the data returned after the update)
+interface UpdateRoomResponse {
+  success: boolean;
+  data: any;  // This could be more specific if you know the structure of the room data returned
 }

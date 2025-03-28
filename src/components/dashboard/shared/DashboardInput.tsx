@@ -111,7 +111,7 @@ interface Props {
   maxLength?: number;
   minLength?: number;
   placeholder?: string;
-  type?: "text" | "textarea" | "password"; // ✅ Renamed from "input" to "type"
+  type?: "text" | "textarea" | "password"; // Renamed from "input" to "type"
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   error?: string;
@@ -153,7 +153,7 @@ const DashboardInput: FC<Props> = ({
       ) : (
         <Input
           name={name}
-          type={type} // ✅ Ant Design expects "type", not "input"
+          type={type} //  Ant Design expects "type", not "input"
           value={value}
           disabled={disabled}
           onChange={onChange}

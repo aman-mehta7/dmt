@@ -56,6 +56,8 @@ import { FaTrash } from "react-icons/fa6";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import type { InputRef, TimeRangePickerProps } from "antd";
+import { getPlaces } from "../../../../redux/actions/places";
+import { useEffect } from "react";
 
 const Tab: FC<{ children: ReactNode; className?: string }> = ({
   children,
@@ -224,6 +226,9 @@ const AddEventsPage = () => {
   const [currentTab, setCurrentTab] = useState<string>(
     listingItems[0]?.key as string
   );
+  const sellerPlaces = useAppSelector((state) => state.places.sellerPlaces);
+
+  
   const [categoryItem, setCategoryItem] = useState<string>(
     category_items[0].key as string
   );
@@ -237,7 +242,9 @@ const AddEventsPage = () => {
   );
 
   const onTabChange = (key: string) => setCurrentTab(key);
-
+  useEffect(() => {
+    dispatch(getPlaces()); // Fetch available places when the component loads
+  }, [dispatch]);
   const dispatchEvent = (state: EventModel) =>
     dispatch(storeNewEventDetails(state));
 
@@ -326,6 +333,7 @@ const AddEventsPage = () => {
 
   const onAddEvent = async () => {
     const {
+      id, // Exclude this field
       photos,
       onlineEvent,
       onsiteEvent,
@@ -340,7 +348,7 @@ const AddEventsPage = () => {
       isDiscountAvailable,
       ...rest
     } = addEventsDetails;
-
+console.log(addEventsDetails,'addEventsDetails')
     const businessNatureData =
       addEventsDetails.businessNature === "INDIVIDUAL"
         ? {
@@ -375,7 +383,7 @@ const AddEventsPage = () => {
       ...isDiscountAvailableInData,
     };
 
-    const isValid = validate(data);
+    // const isValid = validate(data);
     const formData = new FormData();
 
     function appendFormData(data: any, rootKey: string = "") {
@@ -398,14 +406,14 @@ const AddEventsPage = () => {
       ...businessNatureData,
     });
 
-    if (!isValid.length) {
+    // if (!isValid.length) {
       const success = await dispatch(createEvent(formData));
       if (success) {
         navigate(`/app/events`);
         dispatch(storeNewEventDetails(initEventDetailsState));
       }
     }
-  };
+  // };
 
   const {
     businessNature,
@@ -443,6 +451,27 @@ const AddEventsPage = () => {
                 title={`Select Type`}
                 intro={`Your Event should be of the below type.`}
               />
+              <div className="border-2 border-fade-white p-4 rounded-lg">
+    <h3 className="text-dark-blue mb-3 font-semibold">Select Property</h3>
+    <Select
+      className="w-full"
+      placeholder="Select a property"
+      value={addEventsDetails.id || undefined}
+      onChange={(value) =>
+        dispatchEvent({
+          ...addEventsDetails,
+          id: value, // Store selected place ID
+        })
+      }
+    >
+      {sellerPlaces.map((place) => (
+        <Select.Option key={place.id} value={place.id}>
+          {place.title}
+        </Select.Option>
+      ))}
+    </Select>
+  </div>
+
               <RadioBox
                 items={select_events}
                 onChange={(e: RadioChangeEvent) =>
