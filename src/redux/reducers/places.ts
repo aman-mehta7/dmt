@@ -36,8 +36,12 @@ const placeSlice = createSlice({
   initialState,
   name: "places",
   reducers: {
-    storePlaces: (state, { payload }: PayloadAction<Place[]>) => {
-      state.places = payload;
+    // storePlaces: (state, { payload }: PayloadAction<Place[]>) => {
+    //   state.places = payload;
+    // },
+    storePlaces: (state, action: PayloadAction<Place[]>) => {
+      console.log("Redux Store Update:", action.payload); // ✅ Log before updating
+      state.sellerPlaces = action.payload; // ✅ Update state correctly
     },
     storeSellerPlaces: (state, { payload }: PayloadAction<Place[]>) => {
       state.sellerPlaces = payload;

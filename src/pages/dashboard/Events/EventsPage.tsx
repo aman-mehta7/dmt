@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../../../components";
 import { TableColumnsType, Table, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { EventModel } from "../../../types/event";
-import { useAppSelector } from "../../../hooks/useTypedSelectors";
+import { useAppSelector,useAppDispatch } from "../../../hooks/useTypedSelectors";
 import { RootAppState } from "../../../redux/store";
 import DeleteEvent from "./Delete/DeleteEvent";
+import { getAllEvents } from "../../../redux/actions/events"; // Fetch events
+
 
 const items = [
   {
@@ -21,11 +23,80 @@ const items = [
   },
 ];
 
+const EventsPage = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  
+  // Get events from Redux
+  const { events } = useAppSelector((state: RootAppState) => state.events);
+  const {
+    user: { id: userId },
+  } = useAppSelector((state: RootAppState) => state.auth);
+  
+  // const [selectEvent, setSelectEvent] = useState<string>("online"); // Default filter
+
+const [selectEvent, setSelectEvent] = useState<string>(
+  items[0].key as string
+);
+  useEffect(() => {
+    dispatch(getAllEvents()); // Fetch all events when page loads
+  }, [dispatch]);
+  
+ 
+
+// const columns: TableColumnsType<EventModel> = [
+//   {
+//     title: "Image",
+//     dataIndex: "files",
+//     render: (data) => <img src={data[0].url} alt={data[0].original_name} />,
+//   },
+//   {
+//     title: "Name",
+//     dataIndex: "name",
+//     render: (text: string, record: EventModel) => (
+//       <NavLink to={`/app/events/${record.id}/details`}>{text}</NavLink>
+//     ),
+//   },
+//   {
+//     title: "Category",
+//     dataIndex: "category",
+//   },
+//   {
+//     title: "Status",
+//     dataIndex: "status",
+//   },
+//   {
+//     title: "Location",
+//     dataIndex: "location",
+//   },
+//   {
+//     title: "Business Nature",
+//     dataIndex: "businessNature",
+//   },
+//   {
+//     title: "Price",
+//     dataIndex: "price",
+//   },
+//   {
+//     title: "Actions",
+//     dataIndex: "actions",
+//     render: (_, { id }: EventModel) => {
+//       if (id) {
+//         return <DeleteEvent id={id} />;
+//       }
+//     },
+//   },
+// ];
 const columns: TableColumnsType<EventModel> = [
   {
     title: "Image",
     dataIndex: "files",
-    render: (data) => <img src={data[0].url} alt={data[0].original_name} />,
+    render: (data) =>
+      data?.length ? (
+        <img src={data[0].url} alt={data[0].original_name} width={50} />
+      ) : (
+        "No Image"
+      ),
   },
   {
     title: "Name",
@@ -34,48 +105,22 @@ const columns: TableColumnsType<EventModel> = [
       <NavLink to={`/app/events/${record.id}/details`}>{text}</NavLink>
     ),
   },
-  {
-    title: "Category",
-    dataIndex: "category",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-  },
-  {
-    title: "Location",
-    dataIndex: "location",
-  },
-  {
-    title: "Business Nature",
-    dataIndex: "businessNature",
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-  },
+  { title: "Category", dataIndex: "category" },
+  { title: "Status", dataIndex: "status" },
+  { title: "Location", dataIndex: "location" },
+  { title: "Business Nature", dataIndex: "businessNature" },
+  { title: "Price", dataIndex: "price" },
   {
     title: "Actions",
     dataIndex: "actions",
-    render: (_, { id }: EventModel) => {
-      if (id) {
-        return <DeleteEvent id={id} />;
-      }
-    },
+    render: (_, { id }: EventModel) => id && <DeleteEvent id={id} />,
   },
 ];
+const onSelectEvent: MenuProps["onClick"] = ({ key }) => setSelectEvent(key);
 
-const EventsPage = () => {
-  const navigate = useNavigate();
-  const { events } = useAppSelector((state: RootAppState) => state.events);
-  const {
-    user: { id: userId },
-  } = useAppSelector((state: RootAppState) => state.auth);
-  const [selectEvent, setSelectEvent] = useState<string>(
-    items[0].key as string
-  );
 
-  const onSelectEvent: MenuProps["onClick"] = ({ key }) => setSelectEvent(key);
+// const onSelectEvent: MenuProps["onClick"] = ({ key }) => setSelectEvent(key);
+
 
   // const handleMenuClick: MenuProps["onClick"] = (e) => {
   //   message.info("Click on menu item.");

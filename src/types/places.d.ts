@@ -89,6 +89,8 @@ export interface RoomModel {
   discount: number;
   transferService: string;
   extraAmount: number;
+  images: string[]; //  Ensure images is an array of strings
+
 }
 
 export interface AddPlaceModel {

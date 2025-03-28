@@ -140,6 +140,7 @@ export default function Router() {
         
         // { path: "stays/:id/rooms/create", element: <StaysAddRoomPage /> },
         { path: "rooms/create", element: <StaysAddRoomPage /> },
+        { path: "rooms/edit/:roomId", element: <StaysAddRoomPage /> },  // ✅ Route for editing
 
         {
           path: "stays/:id/rooms/edit/:editId",

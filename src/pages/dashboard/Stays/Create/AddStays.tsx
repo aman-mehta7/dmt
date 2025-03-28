@@ -19,6 +19,8 @@ import { RootAppState } from "../../../../redux/store";
 import { useObjectValidation } from "../../../../hooks";
 // import { useNavigate } from "react-router-dom";
 import { createPlace } from "../../../../redux/actions/places";
+import { useNavigate } from "react-router-dom";
+
 
 const Tab: FC<{ children: ReactNode; className?: string }> = ({
   children,
@@ -31,7 +33,9 @@ const Tab: FC<{ children: ReactNode; className?: string }> = ({
 
 const AddStaysPage = () => {
   // const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate(); //  Get navigate function
+
   const { validate } = useObjectValidation();
   const [currentTab, setCurrentTab] = useState<string>(
     staysItems[0]?.key as string
@@ -90,7 +94,7 @@ const AddStaysPage = () => {
         formData.append(`photos`, image);
       });
 
-      dispatch(createPlace(formData));
+      dispatch(createPlace(formData,navigate));
       dispatch(storeNewPlaceDetails(placeInitState));
       // navigate(`/app/stays`);
     }
@@ -315,7 +319,7 @@ const AddStaysPage = () => {
                   <DashboardInput
                     title={`Description`}
                     className={`mt-6`}
-                    input="textarea"
+                    type="text"
                     minLength={400}
                     maxLength={800}
                     value={addPlaceDetails.description}

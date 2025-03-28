@@ -10,6 +10,7 @@ import {
 } from "../../../hooks/useTypedSelectors";
 import { RootAppState } from "../../../redux/store";
 import { getPlaceRooms } from "../../../redux/actions/places";
+import TextArea from "antd/es/input/TextArea";
 
 const Tab: FC<{ children: ReactNode; className?: string }> = ({
   children,
@@ -100,13 +101,13 @@ const StaysDetailsPage: FC = () => {
                 onChange={onChangeHandler}
               />
             </div>
-            <DashboardInput
+            <TextArea
               title={`Description`}
-              input="textarea"
+              // input="textarea"
               minLength={400}
               maxLength={800}
               value={place?.description}
-              subTitle={`Describe what makes your space unique.`}
+              // subTitle={`Describe what makes your space unique.`}
               placeholder="exp: Romantic Spanish villa - 5 min from the beach"
               onChange={onChangeHandler}
             />
