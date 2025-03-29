@@ -26,6 +26,9 @@ import {
 import PropertyPage from "../pages/dashboard/Properties/PropertyPage";
 import AddPropertyForm from "../pages/dashboard/Properties/Create/AddProperties";
 
+//stays details page
+import Staysdetails from "../pages/dashboard/Stays/StaysDetails";
+
 const Loadable = (Component: any) => (props: any) => {
   return (
     <Suspense fallback={<Loader loading={true || ""} />}>
@@ -44,8 +47,10 @@ const TripBoardPage = Loadable(TripBoard);
 const ConfirmEmailPage = Loadable(ConfirmEmail);
 const LoginPage = Loadable(lazy(() => import("../pages/auth/Loginpage")));
 const RegisterPage = Loadable(lazy(() => import("../pages/auth/RegisterPage")));
-const OtpVerify = Loadable(lazy(()=> import("../pages/auth/OtpVerify") ));
-const PasswordResetPage  = Loadable(lazy(()=> import("../pages/auth/PasswordResetPage")))
+const OtpVerify = Loadable(lazy(() => import("../pages/auth/OtpVerify")));
+const PasswordResetPage = Loadable(
+  lazy(() => import("../pages/auth/PasswordResetPage"))
+);
 // Dashboard pages
 const DashboardPage = Loadable(Dashboard);
 const StaysPage = Loadable(Stays);
@@ -95,7 +100,7 @@ export default function Router() {
           element: (
             <GuestGuard>
               <OtpVerify />
-             </GuestGuard>
+            </GuestGuard>
           ),
         },
         {
@@ -114,7 +119,6 @@ export default function Router() {
             </GuestGuard>
           ),
         },
-        
       ],
     },
     {
@@ -122,7 +126,7 @@ export default function Router() {
       element: (
         <>
           {/* <AuthGuard> */}
-            <DashboardLayout />
+          <DashboardLayout />
           {/* </AuthGuard> */}
         </>
       ),
@@ -137,10 +141,10 @@ export default function Router() {
         { path: "stays/:id/details", element: <StaysDetailsPage /> },
         // { path: "stays/:id/rooms", element: <StaysRoomsPage /> },
         { path: "rooms", element: <StaysRoomsPage /> },
-        
+
         // { path: "stays/:id/rooms/create", element: <StaysAddRoomPage /> },
         { path: "rooms/create", element: <StaysAddRoomPage /> },
-        { path: "rooms/edit/:roomId", element: <StaysAddRoomPage /> },  // ✅ Route for editing
+        { path: "rooms/edit/:roomId", element: <StaysAddRoomPage /> }, // ✅ Route for editing
 
         {
           path: "stays/:id/rooms/edit/:editId",
@@ -174,6 +178,11 @@ export default function Router() {
         {
           path: "/search",
           element: <Searchpage />,
+        },
+        ///stays details
+        {
+          path: "/stays/:id",
+          element: <Staysdetails/>,
         },
         {
           path: "/:category/details/:id",
