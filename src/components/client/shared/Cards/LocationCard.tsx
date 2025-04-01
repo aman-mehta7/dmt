@@ -34,7 +34,7 @@ const LocationCard: FC<Props> = ({ data, isPlace }) => {
   console.log(data);
 
   return (
-    <div className={`rounded-xl shadow-xl m-3.5 overflow-hidden`}>oiutiutiotiutiuyot
+    <div className={`rounded-xl shadow-xl m-3.5 overflow-hidden`}>
       <div className={`relative`}>
         <Swiper
           ref={swiperRef}
