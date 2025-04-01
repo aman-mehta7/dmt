@@ -51,7 +51,7 @@ const StaysDetails = () => {
 
       {/* -----the sticky divs----- */}
 
-      <div className=" h-[260vh] w-full md:px-16 absolute top-36 left-7 md:top-[1020px] lg:top-[600px] flex justify-between mt-6 ">
+      <div className=" h-[202vh] w-full md:px-16 absolute top-36 left-7 md:top-[1020px] lg:top-[600px] flex justify-between mt-6 ">
         {/* lines & buttons---- */}
         <div className=" bg-white place-content-center  -ml-1   md:pl-20 lg:w-[68%] md:w-[95%] border-zinc-300 w-[91%] sticky top-[60px]  z-10 md:h-[102px] h-[93px] border-b border-t ">
           <div className="font-semibold text-sm flex gap-3 transition-all px-1 md:gap-8 md:text-xl  ">
@@ -87,7 +87,7 @@ const StaysDetails = () => {
 
         <div
           ref={ref}
-          className="hidden lg:block mt-7 pt-5 mr-1 sticky top-[140px] z-10 w-[30%]
+          className="hidden lg:block max-w-[400px] mt-7 pt-5 sticky top-[140px] z-10 w-[30%] mr-14
          h-[120px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] p-4 "
         >
           <h1 className="font-semibold text-lg ">Select room for pricing</h1>
@@ -99,8 +99,8 @@ const StaysDetails = () => {
 
         <div
           ref={ref2}
-          className=" hidden sticky top-[140px] mt-7 pt-5 mr-1 z-10 w-[30%]
-         h-[320px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] "
+          className=" hidden sticky top-[140px] max-w-[350px] mt-7 pt-5 z-10 w-[30%] mr-20
+         h-[340px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] "
         >
           <div className=" border-b border-zinc-300 px-4">
             <h1 className="font-semibold text-lg ">NPR500.00</h1>
@@ -268,7 +268,7 @@ const StaysDetails = () => {
           </h1>
           <div className="flex flex-col gap-3 mt-5 md:flex-row md:gap-5 md:w-[95%] ">
             <div
-              className=" bg-[#F4F4F4] border-[#9427F7] border h-auto w-[90%] lg:w-[85%] md:h-[310px] p-4 xl:h-[410px]
+              className=" bg-[#F4F4F4] border-[#9427F7] border h-auto max-w-[520px] w-[90%] lg:w-[85%] md:h-[310px] p-4 xl:h-[410px]
            rounded-md px-3 text-sm flex flex-col gap-2 md:pt-5 "
             >
               <ul className="list-disc list-inside flex flex-col gap-2 ">
@@ -298,7 +298,7 @@ const StaysDetails = () => {
 
             {/* -----card2----- */}
             <div
-              className=" bg-[#F4F4F4] border-[#9427F7] border h-auto w-[90%] lg:w-[85%] md:h-[310px] xl:h-[410px] p-4
+              className=" bg-[#F4F4F4] border-[#9427F7] border max-w-[520px] h-auto w-[90%] lg:w-[85%] md:h-[310px] xl:h-[410px] p-4
             rounded-md px-3 text-sm flex flex-col gap-2 "
             >
               <img
@@ -552,15 +552,15 @@ const StaysDetails = () => {
         </div>
       </body>
 
-      <div className="block lg:hidden ">
+      <div className="block lg:hidden mt-5 ">
         <div
           className={
-            count ? `w-full h-[120px] mt-5  ` : `w-full h-[320px] mt-5 `
+            count ? `w-full h-[120px] mt-5  ` : `w-full h-[320px] mt-5 pl- `
           }
         >
           {count ? (
             <div
-              className="block md:block lg:hidden mt-10 pt-5 ml-20 md:ml-28 md:w-[30%] mx-[15%]
+              className="block md:block lg:hidden max-w-[350px] mt-10 pt-5 ml-20 md:ml-28 md:w-[30%] mx-[15%]
           h-[120px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] p-4 "
             >
               <h1 className="font-semibold text-lg ">
@@ -572,7 +572,7 @@ const StaysDetails = () => {
             </div>
           ) : (
             <div
-              className=" block md:block lg:hidden mt-10 pt-5 md:ml-28 mx-[15%] md:w-[38%] w-[75%]
+              className=" block md:block lg:hidden max-w-[350px] mt-10 pt-5 md:ml-28 mx-[15%] md:w-[38%] w-[75%]
           h-[320px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] "
             >
               <div className=" border-b border-zinc-300 px-4">
