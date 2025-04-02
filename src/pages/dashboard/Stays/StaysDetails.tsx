@@ -51,10 +51,10 @@ const StaysDetails = () => {
 
       {/* -----the sticky divs----- */}
 
-      <div className=" h-[202vh] w-full md:px-16 absolute top-36 left-7 md:top-[1020px] lg:top-[600px] flex justify-between mt-6 ">
-        {/* lines & buttons---- */}
-        <div className=" bg-white place-content-center  -ml-1   md:pl-20 lg:w-[68%] md:w-[95%] border-zinc-300 w-[91%] sticky top-[60px]  z-10 md:h-[102px] h-[93px] border-b border-t ">
-          <div className="font-semibold text-sm flex gap-3 transition-all px-1 md:gap-8 md:text-xl  ">
+      <div className=" lg:h-[135rem] h-[165rem] w-full md:px-16 absolute top-36 left-5 md:top-[1020px] lg:top-[600px] flex justify-between mt-6 ">
+        {/*sticky nav bar*/}
+        <div className=" bg-white place-content-center  md:pl-20 lg:w-[68%] md:w-[95%] border-zinc-300 w-[91%] sticky top-[60px]  z-50  md:h-[102px] h-[93px] border-b border-t ">
+          <div className="font-semibold text-sm flex gap-2 transition-all md:gap-8 md:text-xl  ">
             <a
               href="#description"
               className="hover:text-[#9427F7] border-[0.2px] border-zinc-300 l shadow-md shadow-[#bab9c6]  p-2 rounded-xl "
@@ -62,7 +62,7 @@ const StaysDetails = () => {
               Details
             </a>
             <a
-              href="#room"
+              href="#rooms"
               className="hover:text-[#9427F7] border-[0.2px] border-zinc-300 l shadow-md shadow-[#bab9c6]  p-2 rounded-xl"
             >
               Room
@@ -81,13 +81,13 @@ const StaysDetails = () => {
             </a>
           </div>
         </div>
-        {/* lines & buttons end ---- */}
+        {/* sticky nav bar end*/}
 
-        {/* sticky div for room selection */}
+        {/* sticky div for booking */}
 
         <div
           ref={ref}
-          className="hidden lg:block max-w-[400px] mt-7 pt-5 sticky top-[140px] z-10 w-[30%] mr-14
+          className="hidden lg:block max-w-[400px] mt-7 pt-5 sticky z-50 top-[140px] w-[30%]
          h-[120px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] p-4 "
         >
           <h1 className="font-semibold text-lg ">Select room for pricing</h1>
@@ -99,8 +99,8 @@ const StaysDetails = () => {
 
         <div
           ref={ref2}
-          className=" hidden sticky top-[140px] max-w-[350px] mt-7 pt-5 z-10 w-[30%] mr-20
-         h-[340px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] "
+          className=" hidden sticky top-[140px] max-w-[350px] mt-7 pt-5 z-10 w-[30%]
+         h-[330px] border-[0.2px] border-zinc-300 bg-white rounded-md shadow-md shadow-[#bab9c6] "
         >
           <div className=" border-b border-zinc-300 px-4">
             <h1 className="font-semibold text-lg ">NPR500.00</h1>
@@ -147,11 +147,16 @@ const StaysDetails = () => {
           </div>
         </div>
       </div>
+       {/* sticky div for booking end */}
+
       {/* -----the sticky divs----- end */}
 
-    <div className=" relative p-6 overflow-hidden ">
-      <header className="overflow-hidden">
-        <div className="md:px-12">
+
+
+    <div className=" md:mx-12 mx-6 parent-div relative py-6 overflow-hidden ">
+      <header>
+        <div>
+          {/* share button div */}
           <div className="flex justify-between">
             <div>
               <h1 className="text-xl font-semibold md:text-2xl ">Test</h1>
@@ -196,6 +201,7 @@ const StaysDetails = () => {
               </ul>
             </div>
           </div>
+          {/* share button div end */}
 
           {/* images for mid and large devices */}
 
@@ -245,12 +251,12 @@ const StaysDetails = () => {
         {/* img & description */}
         <div className="md:px-20 pt-28 md:pt-36 ">
           <img
-            className=" absolute scale-[0.17] -left-[89px] top-[45px]
+            className=" absolute scale-[0.17] -left-[89px] top-[40px]
             md:-left-[9px] md:top-[49px] md:pt-3  md:scale-[0.2]"
             src="https://dmttourism.com/images/default-profile.png"
             alt=""
           />
-          <div id="description" className="mt-[90px] flex flex-col gap-3  ">
+          <div id="description"  className="md:-mt-[90px] pt-44 -mt-[90px] md:pt-48 flex flex-col gap-3  ">
             <h1 className="text-xl font-semibold md:text-2xl ">Description</h1>
             <p className="w-[90%] opacity-70">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse
@@ -262,13 +268,13 @@ const StaysDetails = () => {
         {/* img & description end */}
 
         {/* -----card1----- */}
-        <div id="rooms" className="card-wrapper md:px-20  ">
+        <div id="rooms" className="card-wrapper -mt-36 pt-36 md:-mt-40 md:pt-40 md:px-20 md:pr-24">
           <h1 className="text-xl font-semibold md:text-3xl pt-9 ">
             Choose your room
           </h1>
           <div className="flex flex-col gap-3 mt-5 md:flex-row md:gap-5 md:w-[95%] ">
             <div
-              className=" bg-[#F4F4F4] border-[#9427F7] border h-auto max-w-[520px] w-[90%] lg:w-[85%] md:h-[310px] p-4 xl:h-[410px]
+              className=" bg-[#F4F4F4] border-[#9427F7] border h-auto max-w-[520px] w-[90%] lg:w-[85%] md:w-[80%] md:h-[310px] p-4 xl:h-[410px]
            rounded-md px-3 text-sm flex flex-col gap-2 md:pt-5 "
             >
               <ul className="list-disc list-inside flex flex-col gap-2 ">
@@ -298,7 +304,7 @@ const StaysDetails = () => {
 
             {/* -----card2----- */}
             <div
-              className=" bg-[#F4F4F4] border-[#9427F7] border max-w-[520px] h-auto w-[90%] lg:w-[85%] md:h-[310px] xl:h-[410px] p-4
+              className=" bg-[#F4F4F4] border-[#9427F7] border max-w-[520px] h-auto w-[90%] lg:w-[85%] md:w-[80%] md:h-[310px] xl:h-[410px] p-4
             rounded-md px-3 text-sm flex flex-col gap-2 "
             >
               <img
@@ -454,8 +460,9 @@ const StaysDetails = () => {
           </div>
         </div>
         {/* Amenities ( Public Area ) end */}
+
         {/* Reviews */}
-        <div className="md:px-20">
+        <div id="reviews" className=" pt-36 -mt-36 md:pt-40 md:-mt-40 md:px-20">
           <h1 className=" text-xl font-semibold md:text-3xl pt-9 ">Rewiews</h1>
           <div className="flex items-center gap-4">
             <img src="" alt="" />
@@ -474,8 +481,9 @@ const StaysDetails = () => {
           </div>
         </div>
         {/* Reviews end */}
+
         {/* Policies */}
-        <div className="md:px-20 w-[90%] overflow-hidden text-wrap ">
+        <div id="info" className="  pt-36 -mt-36 md:pt-40 md:-mt-40 md:px-20 w-[90%] overflow-hidden text-wrap ">
           <h1 className=" text-xl font-semibold md:text-3xl pt-9 ">Policies</h1>
           <h1 className=" font-semibold pt-2 ">Good To Know</h1>
         </div>

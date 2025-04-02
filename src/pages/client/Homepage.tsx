@@ -1,3 +1,4 @@
+import { StaysPage } from "..";
 import {
   Activities,
   ClientContainer,
@@ -9,6 +10,7 @@ import {
 } from "../../components";
 import { useAppSelector } from "../../hooks/useTypedSelectors";
 import { RootAppState } from "../../redux/store";
+import StaysCard from "../../components/client/shared/Cards/StaysCard";
 
 const Homepage = () => {
   const { places } = useAppSelector((state: RootAppState) => state.places);
@@ -25,6 +27,7 @@ const Homepage = () => {
           >
             Featured
           </h2>
+          <StaysCard />
           <div
             className={`grid gap-8 grid-flow-rows grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 mt-10`}
           >
