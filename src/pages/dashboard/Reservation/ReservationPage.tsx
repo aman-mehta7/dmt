@@ -229,7 +229,7 @@ const ReservationPage: FC = () => {
                 title={selectTab}
                 iconPlacement="right"
                 icon={
-                  <MdKeyboardArrowDown className={`text-primary text-xl`} />
+                  <MdKeyboardArrowDown  />
                 }
               />
             </Dropdown>
@@ -257,7 +257,7 @@ const ReservationPage: FC = () => {
                   title={selectEvent}
                   iconPlacement="right"
                   icon={
-                    <MdKeyboardArrowDown className={`text-primary text-xl`} />
+                    <MdKeyboardArrowDown/>
                   }
                 />
               </Dropdown>
@@ -275,7 +275,7 @@ const ReservationPage: FC = () => {
                 title={selectCategory}
                 iconPlacement="right"
                 icon={
-                  <MdKeyboardArrowDown className={`text-primary text-xl`} />
+                  <MdKeyboardArrowDown  />
                 }
               />
             </Dropdown>

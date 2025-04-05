@@ -43,7 +43,7 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer
-      className={`relative z-30 w-full bg-dark-blue  pb-10 md:px-6 pt-16 sm:pt-24 lg:px-8 lg:pt-42 lg:pb-20`}
+      className={`relative z-30 w-full bg-dark-blue text-white pb-10 md:px-6 pt-16 sm:pt-24 lg:px-8 lg:pt-42 lg:pb-20`}
       aria-labelledby="footer-heading"
     >
       <Container className={`mx-auto max-w-7xl`}>

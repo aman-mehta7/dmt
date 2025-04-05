@@ -265,4 +265,9 @@ body::-webkit-scrollbar-thumb:hover {
   border: 1px solid var(--light-primary);
   padding: 10px;
   width: 100%;
+} 
+
+.scroll{
+  scrollbar-color: transparent transparent;
+  cursor: pointer;
 }

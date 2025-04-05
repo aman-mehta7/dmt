@@ -150,13 +150,13 @@ console.log(rooms,'rooms')
         <Button
           variant="outline"
           onClick={() => navigate(`/app/rooms/create`)}
-          icon={<CiSquarePlus className={`text-primary group-hover:text-white`} />}
+          icon={<CiSquarePlus />}
           title={`Add New Room`}
         />
       </div>
 
       {/* ✅ Dropdown to select place */}
-      <div className="my-4">
+      <div className="my-4 border rounded-md border-[#D2D2D2] ">
         <Select
           className="w-full"
           placeholder="Select a place"

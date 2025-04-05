@@ -1,6 +1,6 @@
-import { StaysPage } from "..";
+
 import {
-  Activities,
+  // Activities,
   ClientContainer,
   Download,
   EventCard,
@@ -17,17 +17,20 @@ const Homepage = () => {
   const { events } = useAppSelector((state: RootAppState) => state.events);
 
   return (
-    <>
+    <div className="overflow-hidden">
       <Hero />
-      <Activities data={places} />
-      <Section>
+      {/* <Activities data={places} /> */}
+      <Section className="mt-16" >
         <ClientContainer>
           <h2
             className={`text-center text-dark-blue text-3xl md:text-5xl font-bold leading-tight`}
           >
             Featured
           </h2>
+
+           {/* // card for stays details page  */}
           <StaysCard />
+
           <div
             className={`grid gap-8 grid-flow-rows grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 mt-10`}
           >
@@ -54,7 +57,7 @@ const Homepage = () => {
           </div>
         </ClientContainer>
       </Section>
-    </>
+    </div>
   );
 };
 

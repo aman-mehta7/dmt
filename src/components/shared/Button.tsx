@@ -104,17 +104,17 @@ const Button: FC<Props> = ({
         } items-center gap-2`
       } ${
         variant === "outline"
-          ? `bg-white ring-1 ring-primary hover:ring-white hover:bg-primary ${
-              !disabled && `hover:opacity-70`
+          ? ` hover:bg-[#9333EB] hover:text-white bg-white text-[#9333EB] border-[#9333EB] border shadow-md shadow-[#bab9c6] ${
+              !disabled && `hover:opacity-100`
             }`
-          : `bg-primary ring-1 ring-primary hover:ring-primary hover:bg-white ${
+          : ` bg-[#9333EB] text-white hover:bg-white hover:text-[#9333EB] border-[#9333EB] border shadow-md shadow-[#bab9c6] text-balck  ${
               !disabled && `hover:opacity-70`
             }`
       } ${disabled ? `opacity-40 cursor-not-allowed` : `opacity-100`}
       rounded-md smooth px-3 py-2 shadow-sm text-center min-w-24`}
     >
       {iconPlacement === "left" && icon}
-      {children || <span>{title}</span>} {/* ✅ Now supports both title & children */}
+      {children || <span>{title}</span>} {/* ✅ Now supports both title & cildren */}
       {iconPlacement === "right" && icon}
     </button>
   );
