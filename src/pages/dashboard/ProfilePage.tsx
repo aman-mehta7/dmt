@@ -406,16 +406,16 @@ const ProfilePage = () => {
         </div>
         <div className="flex gap-4 flex-col w-1/2">
           <div className="bg-white rounded p-4">
-            <div className="grid gap-3 grid-flow-row grid-cols-2">
+            <div className="grid gap-3 grid-flow-row grid-cols-2 ">
               <DashboardInput name="firstName" onChange={onChangeHandler} value={formState.firstName} placeholder="Enter First Name" />
               <DashboardInput name="lastName" value={formState.lastName} onChange={onChangeHandler} placeholder="Enter Last Name" />
               <div className="relative">
-                <DashboardInput name="email" value={formState.email} disabled />
+                <DashboardInput name="email" value={formState.email} />
                 <InputStatus status={formState?.isEmailConfirmed ? "verified" : "not verified"} />
               </div>
-              <DashboardInput name="role" value={`Role: ${formState.role}`} disabled />
+              <DashboardInput name="role" value={`Role: ${formState.role}`} />
               <div className="relative w-full">
-                <DashboardInput disabled name="phoneNumber" value={formattedNumber || formState?.phoneNumber} onChange={onChangeHandler} placeholder="Enter Phone Number" />
+                <DashboardInput name="phoneNumber" value={formattedNumber || formState?.phoneNumber} onChange={onChangeHandler} placeholder="Enter Phone Number" />
                 <button type="button" onClick={() => setOpenModal(true)} className="absolute top-1/2 -translate-y-1/2 right-12 p-2 rounded bg-fade-white shadow-dark-blue cursor-pointer">
                   <MdEdit className="text-md text-dark-blue" />
                 </button>
