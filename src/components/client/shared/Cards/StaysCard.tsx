@@ -1,6 +1,5 @@
 
 import { useRef } from "react";
-import { useDraggable } from "react-use-draggable-scroll";
 import "../../../../index.css";
 
 const StaysCard = () => {
@@ -31,18 +30,12 @@ const StaysCard = () => {
     },
   ];
 
-  const ref = useRef<HTMLDivElement>(
-    null
-  ) as React.MutableRefObject<HTMLInputElement>;
-  const { events } = useDraggable(ref);
 
   return (
     <div className="flex items-center justify-between gap-60 mt-20 w-[90vw] overflow-hidden ">
       <h1 className="font-bold text-5xl">Promoted by DMT.</h1>
 
       <div
-        ref={ref}
-        {...events}
         className=" relative flex scroll  items-center justify-center gap-5 pl-56 overflow-x-auto select-none "
       >
         {cardProps.map((item, i) => (
